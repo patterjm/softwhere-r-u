@@ -22,7 +22,7 @@ class MainHandler(webapp2.RequestHandler):
         # self.response.write("Hello world!")
         
         template = jinja_env.get_template("templates/base_page.html")
-        values = {"title": "Hello, world!"}
+        values = {"title": "Hello, world! - deploy test"}
         self.response.out.write(template.render(values))
     
 
