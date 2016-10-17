@@ -1,1 +1,3 @@
-This branch is the default branch that displays all fully functional code.
+SoftwhereRU
+
+Creator: Jake Patterson, Yuzong Gao
