@@ -1,0 +1,7 @@
+*.DS_Store
+*.pyc
+
+gae-project/.project
+gae-project/.pydevproject
+
+

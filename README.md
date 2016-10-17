@@ -1,0 +1,3 @@
+This projec is a basic Google App Engine (GAE) template project that can be used as the starting point for most web apps we build in this course.
+
+In addition to the basic GAE Python + Jinja structure, this template also tries (perhaps foolishly) to provide some code snippets that might be useful in your development work.  You can delete snippets that are not applicable to your project or modify them for your needs.
