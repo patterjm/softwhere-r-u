@@ -2,34 +2,78 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <title>Softwhere R U</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<title>SoftwhereRU</title>
 
-  <!-- Font Awesome has a bunch of handy icons that are easy to use (optional) -->
-  <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css"> -->
+<!-- Font Awesome has a bunch of handy icons that are easy to use (optional) -->
+<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css"> -->
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/css/bootstrap-theme.min.css"> <!-- Optional -->
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/bootstrap-theme.min.css">
+<!-- Optional -->
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/static/css/style.css">
+<!-- Custom CSS -->
+<link rel="stylesheet" href="/static/css/style.css">
 
-  <!-- Note many developers load js last. I like to cheat and put little script snippets in my html sometimes,
+<!-- Note many developers load js last. I like to cheat and put little script snippets in my html sometimes,
        so I load my JS in the header and use the $(document).ready() jQuery approach for any running JS code. -->
 
-  <!-- Bootstrap and jQuery JS -->
-  <script src="/static/js/jquery-2.2.3.min.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
+<!-- Bootstrap and jQuery JS -->
+<script src="/static/js/jquery-2.2.3.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 
-  <!-- Custom JS -->
-  <script src="/static/js/main.js"></script>
+<!-- Custom JS -->
+<script src="/static/js/main.js"></script>
 
 </head>
 
 <body>
-  <h1>{{ title }}</h1>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+					aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">SoftwhereRU</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Profile <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Action</a></li>
+							<li><a href="#">Another action</a></li>
+							<li><a href="#">Something else here</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Nav header</li>
+							<li><a href="#">Separated link</a></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul></li>
+					<li><a href="#">View Ideas</a></li>
+
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="#">Notification</a></li>
+					<li><a href="#">Logout</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+		<!--/.container-fluid -->
+	</nav>
+	<div class="outerContainer">
+		{% block content %} {% endblock %}
+	</div>
+
+
 </body>
 
 </html>

@@ -3,3 +3,71 @@
 body {
   padding: 20px 50px;
 }
+
+html,body{
+	height:100vh;	
+}
+
+.myContainer{
+	border:2px solid green;
+  	margin: 0 auto; 
+  	overflow:scroll;
+}
+
+.outerContainer{
+	height:100%;
+	width:90%;
+	margin: 0 auto; 
+	
+}
+
+.smallContainer{
+	height:40%;
+	width:90%;
+}
+
+.midContainer{
+	height:70%;
+	width:60%;
+
+}
+
+.projectBox{
+	height:35%;
+	width:100%;
+	border:1px solid grey;
+	margin-top:10px;
+	margin-bot:10px;
+}
+
+.projectPic{
+	position:relative;
+	top:0px;
+	left:0px;
+	width: 110px;
+	height: 110px;
+}
+
+
+
+.leftBox{
+	position:relative;
+	height:100%;
+	width:30%;
+	float:left;
+}
+
+.rightBox{
+	position:relative;
+	height:100%;
+	width:70%;
+	float:right;
+}
+
+
+
+.projectButton{
+	float:right;
+	margin:3px;
+	clear:right;
+}
