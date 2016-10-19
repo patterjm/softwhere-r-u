@@ -22,7 +22,7 @@ class MainHandler(webapp2.RequestHandler):
         # A basic template could just send text out the response stream, but we use Jinja
         # self.response.write("Hello world!")
         
-        template = jinja_env.get_template("templates/mainpage.html")
+        template = jinja_env.get_template("templates/main_page.html")
         values = {"title": "Hello, world! - deploy testing merge check"}
         self.response.out.write(template.render(values))
     
@@ -30,13 +30,13 @@ class MainHandler(webapp2.RequestHandler):
 class ManageProjectHandler(webapp2.RequestHandler):
     def get(self):
         
-        template = jinja_env.get_template("templates/manageProject.html")
+        template = jinja_env.get_template("templates/manage_projects_page.html")
         values = {"title": "Hello, world! - deploy testing merge check"}
         self.response.out.write(template.render(values))
 
 class AddProjectHandler(webapp2.RequestHandler):
     def get(self):
-        template = jinja_env.get_template("templates/addProject.html")
+        template = jinja_env.get_template("templates/add_project_page.html")
         values = {"title": "Hello, world! - deploy testing merge check"}
         self.response.out.write(template.render(values))
 app = webapp2.WSGIApplication([
