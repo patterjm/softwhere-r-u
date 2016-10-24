@@ -1,9 +1,11 @@
-
-
+import os
 
 import jinja2
-import os
 import webapp2
+
+from handlers import main_handler
+
+
 # Jinja environment instance necessary to use Jinja templates.
 def __init_jinja_env():
     jenv = jinja2.Environment(
@@ -16,31 +18,15 @@ def __init_jinja_env():
 
 jinja_env = __init_jinja_env()
 
-
-class MainHandler(webapp2.RequestHandler):
-    def get(self):
-        # A basic template could just send text out the response stream, but we use Jinja
-        # self.response.write("Hello world!")
-        
-        template = jinja_env.get_template("templates/main_page.html")
-        values = {"title": "Hello, world! - deploy testing merge check"}
-        self.response.out.write(template.render(values))
-    
-
-class ManageProjectHandler(webapp2.RequestHandler):
-    def get(self):
-        
-        template = jinja_env.get_template("templates/manage_projects_page.html")
-        values = {"title": "Hello, world! - deploy testing merge check"}
-        self.response.out.write(template.render(values))
-
-class AddProjectHandler(webapp2.RequestHandler):
-    def get(self):
-        template = jinja_env.get_template("templates/add_project_page.html")
-        values = {"title": "Hello, world! - deploy testing merge check"}
-        self.response.out.write(template.render(values))
 app = webapp2.WSGIApplication([
-    ('/', MainHandler),
-    ('/manageProject', ManageProjectHandler),
-    ('/addProject', AddProjectHandler)
+    ('/', main_handler.MainHandler),
+    ('/manage-projects', main_handler.ManageProjectsHandler),
+    ('/add-project', main_handler.AddProjectHandler),    
+    ('/login-page', main_handler.LoginHandler),
+    ('/add-collaborator', main_handler.AddCollaboratorHandler),
+    ('/explore-new-projects', main_handler.ExploreProjectsHandler),
+    ('/manage-collaborators', main_handler.ManageCollaboratorsHandler),
+    ('/project-detail', main_handler.ProjectDetailHandler),
+    ('/user-profile', main_handler.UserProfileHandler),
+    
 ], debug=True)
