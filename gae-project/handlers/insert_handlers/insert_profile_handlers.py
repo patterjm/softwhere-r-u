@@ -16,7 +16,7 @@ class InsertNewProfileAction(base_handlers.BaseAction):
             profile_key = ndb.Key(urlsafe=self.request.get("profile_entity_key"))
             profile = profile_key.get()
         else:
-            profile = Profile(parent=utils.get_parent_key_for_email(email), id=email)
+            profile = Profile(parent=account_info.key, id=email)
     
         profile.name = self.request.get("profile_name")
         profile.location = self.request.get("profile_location")

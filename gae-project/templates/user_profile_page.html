@@ -11,7 +11,15 @@
 			<p class="profile-font">Name: <span id="profile-name">{{ profile.name }}</span></p>
 			<p class="profile-font">Location: <span id="profile-location">{{ profile.location }}</span></p>
 			<p class="profile-font">Date of Birth: <span id="profile-birthday">{{ profile.dob }}</span></p>
-			<button type="button" class="btn btn-primary">Edit your profile</button>
+			{% if profile_owner == True %}<button type="button" class="btn btn-primary">Edit your profile</button>
+			{% else %}
+			<form action="/insert-notification" method="POST">
+				<input name="sender" type="hidden" value="{{ account_info.key.urlsafe() }}">
+				<input name="receiver" type="hidden" value="{{ profile.key.urlsafe() }}">
+				<input name="type" type="hidden" value="collaborator">
+				<button type="submit" class="btn btn-primary">Add friend</button>
+			</form>
+			{% endif %}
 		</div>
 	</div>
 	<div class="botBox">

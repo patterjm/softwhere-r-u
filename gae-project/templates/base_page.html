@@ -69,6 +69,12 @@
 									{% for notification in notification_query %}
 										<div class="notification-entry">
 											<div>{{ notification.message }}</div>
+											<form action="/delete-notification" method="POST">
+												<input name="notification_entity_key" type="hidden" value="{{ notification.key.urlsafe() }}">
+												<input name="sender_entity_key" type="hidden" value="{{ notification.sender.urlsafe() }}">
+												<button type="submit" name="type-accept" value="accept">Accept</button>
+												<button type="submit" name="type-reject" value="reject">Reject</button>
+											</form> 
 											<br />
 										</div>
 									{% endfor %}

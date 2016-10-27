@@ -4,7 +4,9 @@ import jinja2
 import webapp2
 
 from handlers import main_handler
-from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers
+from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers,\
+    insert_notification_handlers
+from handlers.delete_handlers import delete_notification_handlers
 
 
 
@@ -34,6 +36,9 @@ app = webapp2.WSGIApplication([
     
     ('/insert-project', insert_project_handlers.InsertNewProjectAction),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
+    ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
+    
+    ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     
     
 ], debug=True)
