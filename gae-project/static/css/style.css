@@ -167,7 +167,6 @@ Popup Arrow
 	width: 70%;
 }
 
-
 .topBox {
 	position: relative;
 	height: 40%;
@@ -180,7 +179,7 @@ Popup Arrow
 	width: 40%;
 	height: 100%;
 	border: 2px dashed black;
-	text-align:center;
+	text-align: center;
 }
 
 .rightBox.up {
@@ -190,14 +189,11 @@ Popup Arrow
 	height: 80%;
 	text-align: center;
 	border: none;
-
 }
-
-
 
 .profile-font {
 	font-family: 'Yatra One', cursive;
-	text-align:left;
+	text-align: left;
 }
 
 .leftBox.up img {
@@ -212,7 +208,18 @@ Popup Arrow
 	height: 60%;
 	width: 100%;
 }
-.botBox h4,p,a{
-	position:relative;
-	left:8%;
+
+.botBox h4, p, a {
+	position: relative;
+	left: 8%;
 }
+
+th {
+	background-color: black;
+	color:white;
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2
+}
+
