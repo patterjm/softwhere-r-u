@@ -26,6 +26,12 @@ class MainHandler(base_handlers.BasePage):
             logging.info(project)
         values["project_query"] = project_query
         
+        notification_query = utils.get_query_for_all_notifications_for_email(email)
+        logging.info(notification_query)
+        for notification in notification_query:
+            logging.info(notification)
+        values["notification_query"] = notification_query
+        
 class ManageProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_projects_page.html"
@@ -61,11 +67,15 @@ class UserProfileHandler(base_handlers.BasePage):
     def update_values(self, email, account_info, values):
         if self.request.get('profile_key'):
             profile = ndb.Key(urlsafe=self.request.get('profile_key')).get()
+            values["profile_owner"] = False
         else:
             profile = utils.get_profile_for_email(email)
+            logging.info(profile)
+            values["profile_owner"] = True
         if not profile:
             parent_key = utils.get_parent_key_for_email(email)
-            profile = Profile(parent=parent_key, id=email)
+            profile = Profile(parent=account_info.key, id=email)
+            values["profile_owner"] = True
             profile.put()
         values["profile"] = profile
     

@@ -23,6 +23,8 @@ def get_account_info_for_email(email, create_if_none=False):
         parent_key = get_parent_key_for_email(email)
         logging.info("Creating a new User for user " + email)
         account_info = User(parent=parent_key, id=email)
+        account_info.email = email
+        account_info.friends = []
         account_info.put()
   
     return account_info
@@ -39,5 +41,10 @@ def get_query_for_all_projects_for_email(email):
     return Project.query(ancestor=parent_key).order(Project.date_created)
 
 def get_profile_for_email(email):
-    parent_key = get_parent_key_for_email(email)
+    parent_key = get_user_for_email(email).key
+    logging.info(parent_key)
     return Profile.get_by_id(email, parent=parent_key)
+
+def get_user_for_email(email):
+    parent_key = get_parent_key_for_email(email)
+    return User.get_by_id(email, parent=parent_key)

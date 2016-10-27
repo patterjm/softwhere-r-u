@@ -1,12 +1,14 @@
 
+import logging
+
 from google.appengine.api import users
 import webapp2
 
 import main
 import utils
 
-# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
 
+# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
 ### Pages ###
 class BasePage(webapp2.RequestHandler):
   """Page handlers should inherit from this one."""
@@ -28,7 +30,6 @@ class BasePage(webapp2.RequestHandler):
   def update_values(self, email, account_info, values):
     # Subclasses should override this method to add additional data for the Jinja template.
     pass
-
 
   def get_template(self):
     # Subclasses must override this method to set the Jinja template.
