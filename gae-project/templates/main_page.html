@@ -1,22 +1,29 @@
-{% extends "templates/base_page.html" %}
-
-{% block content %} 
+{% extends "templates/base_page.html" %} {% block content %}
 <h2>Your Current Projects</h2>
 <hr>
 <div class="myContainer smallContainer">
 	<div id="columns">
-		{% for project in project_query %}
-			<div class="project-entry">
-				<div>{{ project.title }}</div>
-				<div>{{ project.description }}</div>
-				<br />
-			</div>
-		{% endfor %}
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Project</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for project in project_query %}
+				<tr>
+					<td>{{ project.title }}</td>
+					<td>{{ project.description }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
 	</div>
 </div>
 
 <hr>
 <h2>View Project From Others</h2>
-<div class="myContainer smallContainer">
-</div>
+<div class="myContainer smallContainer"></div>
 {% endblock%}

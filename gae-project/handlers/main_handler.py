@@ -11,8 +11,9 @@ import webapp2
 
 from handlers import base_handlers
 import main
+from models import Profile, Project
 import utils
-from models import Profile
+
 
 class MainHandler(base_handlers.BasePage):
     def get_template(self):
@@ -33,6 +34,7 @@ class ManageProjectsHandler(base_handlers.BasePage):
 class AddProjectHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/add_project_page.html"
+    
     
 class AddProfileHandler(base_handlers.BasePage):
     def get_template(self):
