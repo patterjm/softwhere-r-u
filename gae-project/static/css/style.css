@@ -43,7 +43,7 @@ html, body {
 	position: relative;
 	top: 0px;
 	left: 0px;
-	width: 60%;
+	width: 70%;
 	height: 60%;
 }
 
@@ -88,12 +88,11 @@ html, body {
 	overflow: visible;
 	position: absolute;
 	top: 3em;
-	right:1em;
+	right: 1em;
 	margin-left: -170px;
 	width: 400px;
 	z-index: 10;
 	display: none;
-	
 }
 
 //
@@ -112,14 +111,14 @@ Popup Arrow
 }
 
 #notificationTitle {
-	display:block;
-        color:#333; 
-        background:#FFF;
-        font-weight:bold;
-        font-size:13px;    
-        padding:8px;
-        margin:0;
-        border-bottom:solid 1px rgba(100, 100, 100, .30);
+	display: block;
+	color: #333;
+	background: #FFF;
+	font-weight: bold;
+	font-size: 13px;
+	padding: 8px;
+	margin: 0;
+	border-bottom: solid 1px rgba(100, 100, 100, .30);
 }
 
 #notificationsBody {
@@ -147,6 +146,7 @@ Popup Arrow
 	margin: -3px 10px 0 10px;
 	cursor: pointer;
 }
+
 #notification_count {
 	padding: 3px 7px 3px 7px;
 	background: #cc0000;
@@ -159,5 +159,59 @@ Popup Arrow
 	position: absolute;
 	margin-top: -11px;
 	font-size: 11px;
-	right:0.5em;
+	right: 0.5em;
+}
+
+.UPContainer {
+	height: 120%;
+	width: 70%;
+}
+
+
+.topBox {
+	position: relative;
+	height: 40%;
+	width: 100%;
+	border: 5px solid black;
+}
+
+.leftBox.up {
+	position: relative;
+	width: 40%;
+	height: 100%;
+	border: 2px dashed black;
+	text-align:center;
+}
+
+.rightBox.up {
+	position: relative;
+	width: 60%;
+	top: 20%;
+	height: 80%;
+	text-align: center;
+	border: none;
+
+}
+
+
+
+.profile-font {
+	font-family: 'Yatra One', cursive;
+}
+
+.leftBox.up img {
+	position: relative;
+	width: 80%;
+	height: auto;
+	top: 5%;
+}
+
+.botBox {
+	position: relative;
+	height: 60%;
+	width: 100%;
+}
+.botBox h4,p,a{
+	position:relative;
+	left:8%;
 }
