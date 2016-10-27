@@ -7,7 +7,6 @@ from google.appengine.api import users
 import webapp2
 
 from handlers import base_handlers
-from main import jinja_env
 import main
 
 

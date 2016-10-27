@@ -1,73 +1,163 @@
 /* Add CSS rules here. */
-
 body {
-  padding: 20px 50px;
+	padding: 20px 50px;
 }
 
-html,body{
-	height:100vh;	
+html, body {
+	height: 100vh;
 }
 
-.myContainer{
-	border:2px solid green;
-  	margin: 0 auto; 
-  	overflow:scroll;
+.myContainer {
+	border: 2px solid green;
+	margin: 0 auto;
+	overflow: scroll;
 }
 
-.outerContainer{
-	height:100%;
-	width:90%;
-	margin: 0 auto; 
+.outerContainer {
+	height: 100%;
+	width: 90%;
+	margin: 0 auto;
+}
+
+.smallContainer {
+	height: 40%;
+	width: 90%;
+}
+
+.midContainer {
+	height: 70%;
+	width: 80%;
+}
+
+.projectBox {
+	height: 45%;
+	width: 90%;
+	border: 1px solid grey;
+	margin-top: 10px;
+	margin-bot: 10px;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.projectPic {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 60%;
+	height: 60%;
+}
+
+.leftBox {
+	position: relative;
+	height: 100%;
+	width: 20%;
+	float: left;
+}
+
+.rightBox {
+	position: relative;
+	height: 100%;
+	width: 80%;
+	float: right;
+	border: 1px solid grey;
+}
+
+.projectButtonBox {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 20%;
+	height: 50%;
+}
+
+.projectButton {
+	position: relative;
+	float: right;
+	margin: 3px;
+	clear: right;
+}
+
+#notification_li {
+	position: relative
+}
+
+#notificationContainer {
+	background-color: #fff;
+	border: 1px solid rgba(100, 100, 100, .4);
+	-webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+	overflow: visible;
+	position: absolute;
+	top: 3em;
+	right:1em;
+	margin-left: -170px;
+	width: 400px;
+	z-index: 10;
+	display: none;
 	
 }
 
-.smallContainer{
-	height:40%;
-	width:90%;
+//
+Popup Arrow
+#notificationContainer:before {
+	content: '';
+	display: block;
+	position: absolute;
+	width: 0;
+	height: 0;
+	color: transparent;
+	border: 10px solid black;
+	border-color: transparent transparent white;
+	margin-top: -20px;
+	margin-left: 188px;
 }
 
-.midContainer{
-	height:70%;
-	width:60%;
-
+#notificationTitle {
+	display:block;
+        color:#333; 
+        background:#FFF;
+        font-weight:bold;
+        font-size:13px;    
+        padding:8px;
+        margin:0;
+        border-bottom:solid 1px rgba(100, 100, 100, .30);
 }
 
-.projectBox{
-	height:35%;
-	width:100%;
-	border:1px solid grey;
-	margin-top:10px;
-	margin-bot:10px;
+#notificationsBody {
+	padding: 33px 0px 0px 0px !important;
+	min-height: 300px;
 }
 
-.projectPic{
-	position:relative;
-	top:0px;
-	left:0px;
-	width: 110px;
-	height: 110px;
+#notificationFooter {
+	background-color: #e9eaed;
+	text-align: center;
+	font-weight: bold;
+	padding: 8px;
+	font-size: 12px;
+	border-top: 1px solid #dddddd;
 }
 
-
-
-.leftBox{
-	position:relative;
-	height:100%;
-	width:30%;
-	float:left;
+#notificationlink {
+	width: 22px;
+	height: 22px;
+	line-height: 22px;
+	border-radius: 50%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	background: black;
+	margin: -3px 10px 0 10px;
+	cursor: pointer;
 }
-
-.rightBox{
-	position:relative;
-	height:100%;
-	width:70%;
-	float:right;
-}
-
-
-
-.projectButton{
-	float:right;
-	margin:3px;
-	clear:right;
+#notification_count {
+	padding: 3px 7px 3px 7px;
+	background: #cc0000;
+	color: #ffffff;
+	font-weight: bold;
+	margin-left: 77px;
+	border-radius: 9px;
+	-moz-border-radius: 9px;
+	-webkit-border-radius: 9px;
+	position: absolute;
+	margin-top: -11px;
+	font-size: 11px;
+	right:0.5em;
 }

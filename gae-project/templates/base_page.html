@@ -61,7 +61,16 @@
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#">Notification</a></li>
+					<li id="notification_li"><span id="notification_count">3</span><a href="#"><span
+							class="glyphicon glyphicon-bell"></span></a>
+						<div id="notificationContainer">
+							<div id="notificationTitle">Notifications</div>
+							<div id="notificationsBody" class="notifications"></div>
+							<div id="notificationFooter">
+								<a href="#">See All</a>
+							</div>
+						</div></li>
+					
 					<li><a href="#">Logout</a></li>
 				</ul>
 			</div>
@@ -69,9 +78,7 @@
 		</div>
 		<!--/.container-fluid -->
 	</nav>
-	<div class="outerContainer">
-		{% block content %} {% endblock %}
-	</div>
+	<div class="outerContainer">{% block content %} {% endblock %}</div>
 
 
 </body>
