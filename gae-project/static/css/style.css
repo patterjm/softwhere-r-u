@@ -39,6 +39,10 @@ html, body {
 	margin-right: 5%;
 }
 
+.projectBox.userBox{
+	height:30%
+}
+
 .projectPic {
 	position: relative;
 	top: 0px;
@@ -203,6 +207,10 @@ Popup Arrow
 	top: 5%;
 }
 
+.user .leftBox.up img{
+	width:60%;
+}
+
 .botBox {
 	position: relative;
 	height: 60%;
@@ -223,7 +231,7 @@ tr:nth-child(even) {
 	background-color: #f2f2f2
 }
 .search-form .form-group {
-  float: right !important;
+  
   transition: all 0.35s, border-radius 0s;
   width: 32px;
   height: 32px;
