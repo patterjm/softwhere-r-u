@@ -4,6 +4,15 @@
 <h2>Your Current Projects</h2>
 <hr>
 <div class="myContainer smallContainer">
+	<div id="columns">
+		{% for project in project_query %}
+			<div class="project-entry">
+				<div>{{ project.title }}</div>
+				<div>{{ project.description }}</div>
+				<br />
+			</div>
+		{% endfor %}
+	</div>
 </div>
 
 <hr>

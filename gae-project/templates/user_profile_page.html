@@ -1,17 +1,17 @@
 {% extends "templates/base_page.html" %} {% block content %}
 <h2>User Profile</h2>
 <hr>
+
 <div class="myContainer UPContainer">
 	<div class="topBox">
 		<div class="leftBox up">
 			<img src="static/pics/1.pic.jpg">
 		</div>
 		<div class="rightBox up">
-			<p class="profile-font">Name: Yuzong's puppey</p>
-			<p class="profile-font">Location: Terre Haute</p>
-			<p class="profile-font">Date of Birth: October 21, 2015</p>
-			<button type="button" class="btn btn-primary ">Send Friend Request
-			</button>
+			<p class="profile-font">Name: <span id="profile-name">{{ profile.name }}</span></p>
+			<p class="profile-font">Location: <span id="profile-location">{{ profile.location }}</span></p>
+			<p class="profile-font">Date of Birth: <span id="profile-birthday">{{ profile.dob }}</span></p>
+			<button type="button" class="btn btn-primary">Edit your profile</button>
 		</div>
 	</div>
 	<div class="botBox">

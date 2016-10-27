@@ -14,6 +14,7 @@ class BasePage(webapp2.RequestHandler):
     user = users.get_current_user()
     if not user:
       self.redirect("/login-page")
+      return
     email = user.email().lower()
     account_info = utils.get_account_info_for_email(email, create_if_none=True)
     values = {"user_email": email,

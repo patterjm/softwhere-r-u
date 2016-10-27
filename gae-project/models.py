@@ -1,40 +1,6 @@
 from google.appengine.ext import ndb
 from google.appengine.ext.ndb import msgprop
-from protorpc.messages import Enum
-
-
-class AccountInfo(ndb.Model):
-    """ Information about this user.  There is only 1 of these per user. """
-
-    # Example property for this example model object.
-    name = ndb.StringProperty(default="")
-
-
-class MyObjectClassName(ndb.Model):
-    """ Another example model object. """
-    
-    # Examples of some different property types.
-    someProperty = ndb.StringProperty(default="")
-    non_indexed_string = ndb.TextProperty()
-    datetime = ndb.DateTimeProperty(auto_now_add=True, auto_now=False)
-    boolean = ndb.BooleanProperty(default=False)
-    someNumericfieldName = ndb.IntegerProperty()
-    float = ndb.FloatProperty()
-    repeatedField = ndb.StringProperty(repeated=True)
-    
-    class ExampleEnum(Enum):
-        """ Properties that can only have a few values."""
-        OPTION_1 = 1
-        OPTION_2 = 2
-        OPTION_3 = 3
-    recipient_type = msgprop.EnumProperty(ExampleEnum, default=ExampleEnum.OPTION_1)
-    
-class MyOtherClassName(ndb.Model):
-    """ Yet another example model object. """
-  
-    single_key = ndb.KeyProperty(kind=MyObjectClassName)
-    list_of_keys = ndb.KeyProperty(kind=MyObjectClassName, repeated=True)
-    
+from protorpc.messages import Enum    
 
 class User(ndb.Model):
     """ Information about this user.  There is only 1 of these per user. """
@@ -50,6 +16,7 @@ class Profile(ndb.Model):
 
     ID = ndb.StringProperty()
     name = ndb.StringProperty()
+    location = ndb.StringProperty()
     description = ndb.TextProperty()
     picture = ndb.BlobProperty()
     dob = ndb.DateTimeProperty()
@@ -70,7 +37,7 @@ class Notification(ndb.Model):
     sender = ndb.KeyProperty(kind='User')
     receiver = ndb.KeyProperty(kind='User')
     message = ndb.TextProperty()
-    time_stamp = ndb.DateTimeProperty()
+    time_stamp = ndb.DateTimeProperty(auto_now=True)
     has_been_viewed = ndb.BooleanProperty(default=False)
 
 
@@ -81,7 +48,7 @@ class Project(ndb.Model):
     title = ndb.StringProperty()
     description = ndb.TextProperty()
     administrators = ndb.KeyProperty(kind='User', repeated=True)
-    date_created = ndb.DateTimeProperty()
+    date_created = ndb.DateTimeProperty(auto_now=True)
     users = ndb.KeyProperty(kind='User', repeated=True)
 
     class ProjectStatus(Enum):
@@ -90,4 +57,4 @@ class Project(ndb.Model):
         ACTIVE = 1
         COMPLETED = 2
 
-    status = msgprop.EnumProperty(ProjectStatus)
+    status = msgprop.EnumProperty(ProjectStatus, default=ProjectStatus.ACTIVE)

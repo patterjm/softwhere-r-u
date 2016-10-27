@@ -4,6 +4,8 @@ import jinja2
 import webapp2
 
 from handlers import main_handler
+from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers
+
 
 
 # Jinja environment instance necessary to use Jinja templates.
@@ -28,5 +30,10 @@ app = webapp2.WSGIApplication([
     ('/manage-collaborators', main_handler.ManageCollaboratorsHandler),
     ('/project-detail', main_handler.ProjectDetailHandler),
     ('/user-profile', main_handler.UserProfileHandler),
+    ('/temp-add-profile', main_handler.AddProfileHandler),
+    
+    ('/insert-project', insert_project_handlers.InsertNewProjectAction),
+    ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
+    
     
 ], debug=True)
