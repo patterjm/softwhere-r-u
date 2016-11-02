@@ -27,11 +27,6 @@ class MainHandler(base_handlers.BasePage):
             logging.info(project)
         values["project_query"] = project_query
         
-        notification_query = utils.get_query_for_all_notifications_for_email(email)
-        logging.info(notification_query)
-        for notification in notification_query:
-            logging.info(notification)
-        values["notification_query"] = notification_query
         
 class ManageProjectsHandler(base_handlers.BasePage):
     def get_template(self):

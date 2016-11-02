@@ -10,7 +10,7 @@ softwareRU.enableButtons = function(){
 	});
 	
 	$('.table > tbody > tr').click(function() {
-		//direct to the project	
+		console.log(111);
 	});
 };
 $(document).ready(function(){
