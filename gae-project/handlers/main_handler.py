@@ -27,7 +27,6 @@ class MainHandler(base_handlers.BasePage):
             logging.info(project)
         values["project_query"] = project_query
         
-        
 class ManageProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_projects_page.html"
@@ -56,7 +55,7 @@ class ManageCollaboratorsHandler(base_handlers.BasePage):
 class ProjectDetailHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/project_detail_page.html"
-    
+        
 class UserProfileHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/user_profile_page.html"
