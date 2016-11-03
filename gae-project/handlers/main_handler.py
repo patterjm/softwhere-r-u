@@ -9,6 +9,8 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import webapp2
 
+from github import Github
+from github.GithubException import BadCredentialsException
 from handlers import base_handlers
 import main
 from models import Profile, Project
@@ -87,3 +89,30 @@ class LoginHandler(webapp2.RequestHandler):
     
     def get_template(self):
         return "templates/login_page.html"
+    
+    def post(self):
+        username = self.request.get("gitUsername")
+        password = self.request.get("gitPassword")
+        logging.info(username)
+        logging.info(password)
+        g = Github(username,password)
+        user = g.get_user()
+        try:
+            name = user.name
+            logging.info(name)
+            self.serve_page(False)
+        except BadCredentialsException:
+            self.serve_page(True)
+            
+    def serve_page(self, failed=False):
+        if failed:
+            logging.info("--------failed")
+            values={"failed": 1}
+            template = main.jinja_env.get_template(self.get_template())
+            self.response.out.write(template.render(values))
+            return "templates/login_page.html"
+        username = self.request.get("gitUsername")
+        values={"username": username}
+        template = main.jinja_env.get_template("templates/main_page.html")
+        self.response.out.write(template.render(values))
+

@@ -50,38 +50,41 @@
 						aria-expanded="false">Profile <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="/add-project">Add Project</a></li>
-							
+							<li><a href="/add-collaborator">Add Collaborators</a></li>
+							<li><a href="#"> hey</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">other</li>
-							
+
 						</ul></li>
 					<li><a href="/explore-new-projects">View Ideas</a></li>
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li id="notification_li"><span id="notification_count">{{ num_noti }}</span><a href="#"><span
-							class="glyphicon glyphicon-bell"></span></a>
+					<li id="notification_li"><span id="notification_count">{{
+							num_noti }}</span><a href="#"><span class="glyphicon glyphicon-bell"></span></a>
 						<div id="notificationContainer">
 							<div id="notificationTitle">Notifications</div>
 							<div id="notificationsBody" class="notifications">
-									{% for notification in notification_query %}
-										<div class="notification-entry">
-											<div>{{ notification.message }}</div>
-											<form action="/delete-notification" method="POST">
-												<input name="notification_entity_key" type="hidden" value="{{ notification.key.urlsafe() }}">
-												<input name="sender_entity_key" type="hidden" value="{{ notification.sender.urlsafe() }}">
-												<button type="submit" name="type-accept" value="accept">Accept</button>
-												<button type="submit" name="type-reject" value="reject">Reject</button>
-											</form> 
-											<br />
-										</div>
-									{% endfor %}
+								{% for notification in notification_query %}
+								<div class="notification-entry">
+									<div>{{ notification.message }}</div>
+									<form action="/delete-notification" method="POST">
+										<input name="notification_entity_key" type="hidden"
+											value="{{ notification.key.urlsafe() }}"> <input
+											name="sender_entity_key" type="hidden"
+											value="{{ notification.sender.urlsafe() }}">
+										<button type="submit" name="type-accept" value="accept">Accept</button>
+										<button type="submit" name="type-reject" value="reject">Reject</button>
+									</form>
+									<br />
+								</div>
+								{% endfor %}
 							</div>
 							<div id="notificationFooter">
 								<a href="#">See All</a>
 							</div>
 						</div></li>
-					
+
 					<li><a href="{{ logout_url }}">Logout</a></li>
 				</ul>
 			</div>

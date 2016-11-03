@@ -217,7 +217,7 @@ Popup Arrow
 	width: 100%;
 }
 
-.botBox h4, p, a {
+.botBox h4, .botBox p, .botBox a {
 	position: relative;
 	left: 8%;
 }
@@ -289,4 +289,8 @@ tr:nth-child(even) {
 	color: #3596e0;
 	left: initial;
 	font-size: 14px;
+}
+
+li a{
+	padding:0px,0px,0px,0px;
 }

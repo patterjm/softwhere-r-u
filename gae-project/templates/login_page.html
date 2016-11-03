@@ -48,11 +48,20 @@
 		<!--/.container-fluid -->
 	</nav>
 	<div class="login-div">
-		<a class="btn btn-default" href="{{ login_url }}" role="button">Sign in with Google</a>
-	</div>
-	
+		<a class="btn btn-default" href="{{ login_url }}" role="button">Sign
+			in with Google</a>
+		<br>
+		<h2>login with Github:</h2>
+		<form action="/login-page" method="POST">
+			<input style="border:1px solid #ccc" name="gitUsername" type="text" placeHolder="username" required>
+			<input style = "border:1px solid #ccc" name="gitPassword" type="password" placeHolder="password" required>
+			<button type="submit" class="btn btn-primary ">login</button>
+		</form>
 
-	
+	</div>
+
+
+
 </body>
 
 </html>
