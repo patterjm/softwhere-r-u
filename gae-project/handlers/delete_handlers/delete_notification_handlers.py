@@ -18,7 +18,6 @@ class DeleteNotificationAction(base_handlers.BaseAction):
             notification = notification_key.get()
             accept = self.request.get("type-accept")
             if accept:
-                test_val = self.request.get("sender_entity_key")
                 notification_sender = ndb.Key(urlsafe=self.request.get("sender_entity_key"))
                 sender_user = notification_sender.get()
                 current_user = utils.get_user_for_email(email)
