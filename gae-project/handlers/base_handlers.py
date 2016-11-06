@@ -24,6 +24,12 @@ class BasePage(webapp2.RequestHandler):
               "logout_url": users.create_logout_url("/")}
     self.update_values(email, account_info, values)
     template = main.jinja_env.get_template(self.get_template())
+    notification_query = utils.get_query_for_all_notifications_for_email(email)
+    logging.info(notification_query)
+    for notification in notification_query:
+        logging.info(notification)
+    values["notification_query"] = notification_query
+    values["num_noti"] = notification_query.count()
     self.response.out.write(template.render(values))
 
 
