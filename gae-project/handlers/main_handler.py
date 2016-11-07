@@ -4,17 +4,18 @@ Created on Oct 17, 2016
 @author: patterjm
 '''
 import json
+import json
 import logging
 
 from google.appengine.api import users
 from google.appengine.api.blobstore import blobstore
 from google.appengine.ext import ndb
 import webapp2
+from webapp2_extras import sessions
 
 from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
-from handlers.base_handlers import SessionHandler
 import main
 from models import Profile
 import utils
@@ -44,9 +45,13 @@ class AddProfileHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/temp_add_profile_page.html"
 
-class AddCollaboratorHandler(base_handlers.BasePage):
+class ManageFriendsHandler(base_handlers.BasePage):
     def get_template(self):
-        return "templates/add_collaborator_page.html"
+        return "templates/manage_friend_page.html"
+
+class AddFriendsHandler(base_handlers.BasePage):
+    def get_template(self):
+        return "templates/add_friend_page.html"
     
 class ExploreProjectsHandler(base_handlers.BasePage):
     def get_template(self):
@@ -80,7 +85,8 @@ class UserProfileHandler(base_handlers.BasePage):
             profile.put()
         values["profile"] = profile
     
-class LoginHandler(SessionHandler):
+
+class LoginHandler(base_handlers.BaseHandler):
     """Custom page to handle multiple methods of user authentication"""
     def get(self):
         user = users.get_current_user()
@@ -122,5 +128,8 @@ class LoginHandler(SessionHandler):
                      "email":email
             }
         self.session['user_info'] = json.dumps(user_info)
-        self.redirect("/")
-
+        self.redirect('/')
+class LogoutHandler(base_handlers.BaseHandler):
+    def get(self):
+        del self.session["user_info"]
+        self.redirect(uri="/")

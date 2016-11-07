@@ -8,10 +8,10 @@ from webapp2_extras import sessions
 
 import main
 import utils
+import json
 
 
-# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
-class SessionHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler):
     def dispatch(self):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
@@ -27,27 +27,23 @@ class SessionHandler(webapp2.RequestHandler):
         # Returns a session using the default cookie key.
         return self.session_store.get_session()
 
-# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
-### Pages ###
-class BasePage(SessionHandler):
+class BasePage(BaseHandler):
   """Page handlers should inherit from this one."""
   def get(self):
     user = users.get_current_user()
     if not user and "user_info" not in self.session:
       self.redirect("/login-page")
       return
-  
-    values = {}
     if user:
         email = user.email().lower()
-        values["logout_url"] = users.create_logout_url("/")
-    elif "user_info" in self.session:
-        jsonVar = json.loads(self.session["user_info"])
-        email = jsonVar["email"].lower()
-        values["logout_url"] = "/github-logout"
+        logout_url = users.create_logout_url("/")
+    elif self.session["user_info"]:
+        email = json.loads(self.session["user_info"])["email"]
+        logout_url = "/logout"
     account_info = utils.get_account_info_for_email(email, create_if_none=True)
-    values["user_email"] = email
-    values["account_info"] = account_info
+    values = {"user_email": email,
+              "account_info": account_info,
+              "logout_url": logout_url}
     self.update_values(email, account_info, values)
     template = main.jinja_env.get_template(self.get_template())
     notification_query = utils.get_query_for_all_notifications_for_email(email)
@@ -56,6 +52,10 @@ class BasePage(SessionHandler):
         logging.info(notification)
     values["notification_query"] = notification_query
     values["num_noti"] = notification_query.count()
+    if notification_query.count() == 0:
+        values["noti_empty"] = False;
+    else:
+        values["noti_empty"] = True;
     self.response.out.write(template.render(values))
 
 
@@ -71,7 +71,7 @@ class BasePage(SessionHandler):
 
 ### Actions ###
 
-class BaseAction(SessionHandler):
+class BaseAction(BaseHandler):
   """ALL action handlers should inherit from this one."""
   def post(self):
     user = users.get_current_user()
@@ -79,9 +79,8 @@ class BaseAction(SessionHandler):
       raise Exception("Missing user!")
     if user:
         email = user.email().lower()
-    elif "user_info" in self.session:
-        jsonVar = json.loads(self.session["user_info"])
-        email = jsonVar["email"].lower()
+    elif self.session["user_info"]:
+        email = json.loads(self.session["user_info"])["email"]
     account_info = utils.get_account_info_for_email(email)
     self.handle_post(email, account_info)
 

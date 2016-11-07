@@ -56,8 +56,8 @@
 						aria-expanded="false">Profile <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="/add-project">Add Project</a></li>
-							<li><a href="/add-collaborator">Add Collaborators</a></li>
-							<li><a href="#"> hey</a></li>
+							<li><a href="/add-friends">Add Friend</a></li>
+							<li><a href="/manage-friends">Manage Friends</a></li>
 							<li role="separator" class="divider"></li>
 							<li class="dropdown-header">other</li>
 
@@ -66,8 +66,8 @@
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li id="notification_li"><span id="notification_count">{{
-							num_noti }}</span><a href="#"><span class="glyphicon glyphicon-bell"></span></a>
+					<li id="notification_li">{%if noti_empty %}<span id="notification_count">{{
+							num_noti }}</span>{% endif %}<a href="#"><span class="glyphicon glyphicon-bell"></span></a>
 						<div id="notificationContainer">
 							<div id="notificationTitle">Notifications</div>
 							<div id="notificationsBody" class="notifications">
