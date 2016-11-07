@@ -3,18 +3,22 @@ Created on Oct 17, 2016
 
 @author: patterjm
 '''
+import json
 import logging
 
 from google.appengine.api import users
+from google.appengine.api.blobstore import blobstore
 from google.appengine.ext import ndb
 import webapp2
 
 from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
+from handlers.base_handlers import SessionHandler
 import main
-import utils
 from models import Profile
+import utils
+
 
 class MainHandler(base_handlers.BasePage):
     def get_template(self):
@@ -72,14 +76,15 @@ class UserProfileHandler(base_handlers.BasePage):
             parent_key = utils.get_parent_key_for_email(email)
             profile = Profile(parent=account_info.key, id=email)
             values["profile_owner"] = True
+            values["form_action"] = blobstore.create_upload_url('/insert-profile')
             profile.put()
         values["profile"] = profile
     
-class LoginHandler(webapp2.RequestHandler):
+class LoginHandler(SessionHandler):
     """Custom page to handle multiple methods of user authentication"""
     def get(self):
         user = users.get_current_user()
-        if user:
+        if user or "user_info" in self.session:
             self.redirect("/")
         values = {"login_url": users.create_login_url("/")}
         template = main.jinja_env.get_template(self.get_template())
@@ -105,12 +110,17 @@ class LoginHandler(webapp2.RequestHandler):
     def serve_page(self, failed=False):
         if failed:
             logging.info("--------failed")
-            values={"failed": 1}
+            values={"failed": failed}
             template = main.jinja_env.get_template(self.get_template())
             self.response.out.write(template.render(values))
             return "templates/login_page.html"
         username = self.request.get("gitUsername")
-        values={"username": username}
-        template = main.jinja_env.get_template("templates/main_page.html")
-        self.response.out.write(template.render(values))
+        password = self.request.get("gitPassword")
+
+        email = filter(lambda obj: obj["primary"] == True, Github(username, password).get_user().get_emails())[0]["email"]
+        user_info = {"username":username,
+                     "email":email
+            }
+        self.session['user_info'] = json.dumps(user_info)
+        self.redirect("/")
 

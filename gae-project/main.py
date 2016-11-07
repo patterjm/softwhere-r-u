@@ -3,11 +3,10 @@ import os
 import jinja2
 import webapp2
 
-from handlers import main_handler
-from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers,\
-    insert_notification_handlers
+from handlers import main_handler, blob_handler
 from handlers.delete_handlers import delete_notification_handlers
-
+from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers, \
+    insert_notification_handlers
 
 
 # Jinja environment instance necessary to use Jinja templates.
@@ -21,6 +20,12 @@ def __init_jinja_env():
     return jenv
 
 jinja_env = __init_jinja_env()
+
+config = {}
+config['webapp2_extras.sessions'] = {
+    # This key is used to encrypt your sessions
+    'secret_key': 'spookysessionsecret',
+}
 
 app = webapp2.WSGIApplication([
     ('/', main_handler.MainHandler),
@@ -41,4 +46,6 @@ app = webapp2.WSGIApplication([
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     
     
-], debug=True)
+    ('/pics/([^/]+)?', blob_handler.BlobServer),
+    
+], config=config, debug=True)

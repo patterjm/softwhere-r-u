@@ -13,6 +13,7 @@ softwareRU.enableButtons = function(){
 		console.log(111);
 	});
 	
+	$('input[name=dob]').datepicker();
 };
 
 softwareRU.enableSearch = function(){

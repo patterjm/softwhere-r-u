@@ -1,27 +1,53 @@
 
+import json
 import logging
 
 from google.appengine.api import users
 import webapp2
+from webapp2_extras import sessions
 
 import main
 import utils
 
 
 # Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
+class SessionHandler(webapp2.RequestHandler):
+    def dispatch(self):
+        # Get a session store for this request.
+        self.session_store = sessions.get_store(request=self.request)
+        try:
+            # Dispatch the request.
+            webapp2.RequestHandler.dispatch(self)
+        finally:
+            # Save all sessions.
+            self.session_store.save_sessions(self.response)
+
+    @webapp2.cached_property
+    def session(self):
+        # Returns a session using the default cookie key.
+        return self.session_store.get_session()
+
+# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
 ### Pages ###
-class BasePage(webapp2.RequestHandler):
+class BasePage(SessionHandler):
   """Page handlers should inherit from this one."""
   def get(self):
     user = users.get_current_user()
-    if not user:
+    if not user and "user_info" not in self.session:
       self.redirect("/login-page")
       return
-    email = user.email().lower()
+  
+    values = {}
+    if user:
+        email = user.email().lower()
+        values["logout_url"] = users.create_logout_url("/")
+    elif "user_info" in self.session:
+        jsonVar = json.loads(self.session["user_info"])
+        email = jsonVar["email"].lower()
+        values["logout_url"] = "/github-logout"
     account_info = utils.get_account_info_for_email(email, create_if_none=True)
-    values = {"user_email": email,
-              "account_info": account_info,
-              "logout_url": users.create_logout_url("/")}
+    values["user_email"] = email
+    values["account_info"] = account_info
     self.update_values(email, account_info, values)
     template = main.jinja_env.get_template(self.get_template())
     notification_query = utils.get_query_for_all_notifications_for_email(email)
@@ -45,13 +71,17 @@ class BasePage(webapp2.RequestHandler):
 
 ### Actions ###
 
-class BaseAction(webapp2.RequestHandler):
+class BaseAction(SessionHandler):
   """ALL action handlers should inherit from this one."""
   def post(self):
     user = users.get_current_user()
-    if not user:
+    if not user and "user_info" not in self.session:
       raise Exception("Missing user!")
-    email = user.email().lower()
+    if user:
+        email = user.email().lower()
+    elif "user_info" in self.session:
+        jsonVar = json.loads(self.session["user_info"])
+        email = jsonVar["email"].lower()
     account_info = utils.get_account_info_for_email(email)
     self.handle_post(email, account_info)
 
