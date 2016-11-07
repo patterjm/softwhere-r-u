@@ -21,19 +21,23 @@ def __init_jinja_env():
     return jenv
 
 jinja_env = __init_jinja_env()
-
+config = {}
+config['webapp2_extras.sessions'] = {
+    # This key is used to encrypt your sessions
+    'secret_key': 'mysupersecretkey',
+}
 app = webapp2.WSGIApplication([
     ('/', main_handler.MainHandler),
     ('/manage-projects', main_handler.ManageProjectsHandler),
     ('/add-project', main_handler.AddProjectHandler),    
     ('/login-page', main_handler.LoginHandler),
-    ('/add-collaborator', main_handler.AddCollaboratorHandler),
+    ('/add-friends', main_handler.AddFriendsHandler),
     ('/explore-new-projects', main_handler.ExploreProjectsHandler),
-    ('/manage-collaborators', main_handler.ManageCollaboratorsHandler),
+    ('/manage-friends', main_handler.ManageFriendsHandler),
     ('/project-detail', main_handler.ProjectDetailHandler),
     ('/user-profile', main_handler.UserProfileHandler),
     ('/temp-add-profile', main_handler.AddProfileHandler),
-    
+    ('/logout', main_handler.LogoutHandler),
     ('/insert-project', insert_project_handlers.InsertNewProjectAction),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
@@ -41,4 +45,4 @@ app = webapp2.WSGIApplication([
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     
     
-], debug=True)
+], config=config, debug=True)

@@ -8,7 +8,8 @@ import logging
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import webapp2
-
+from webapp2_extras import sessions
+import json
 from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
@@ -42,9 +43,13 @@ class AddProfileHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/temp_add_profile_page.html"
 
-class AddCollaboratorHandler(base_handlers.BasePage):
+class ManageFriendsHandler(base_handlers.BasePage):
     def get_template(self):
-        return "templates/add_collaborator_page.html"
+        return "templates/manage_friend_page.html"
+
+class AddFriendsHandler(base_handlers.BasePage):
+    def get_template(self):
+        return "templates/add_friend_page.html"
     
 class ExploreProjectsHandler(base_handlers.BasePage):
     def get_template(self):
@@ -77,7 +82,7 @@ class UserProfileHandler(base_handlers.BasePage):
             profile.put()
         values["profile"] = profile
     
-class LoginHandler(webapp2.RequestHandler):
+class LoginHandler(base_handlers.BaseHandler):
     """Custom page to handle multiple methods of user authentication"""
     def get(self):
         user = users.get_current_user()
@@ -107,12 +112,20 @@ class LoginHandler(webapp2.RequestHandler):
     def serve_page(self, failed=False):
         if failed:
             logging.info("--------failed")
-            values={"failed": 1}
+            values={"failed": failed}
             template = main.jinja_env.get_template(self.get_template())
             self.response.out.write(template.render(values))
             return "templates/login_page.html"
         username = self.request.get("gitUsername")
-        values={"username": username}
-        template = main.jinja_env.get_template("templates/main_page.html")
-        self.response.out.write(template.render(values))
+        password = self.request.get("gitPassword")
 
+        email = filter(lambda obj: obj["primary"] == True, Github(username, password).get_user().get_emails())[0]["email"]
+        user_info = {"username":username,
+                     "email":email
+            }
+        self.session['user_info'] = json.dumps(user_info)
+        self.redirect('/')
+class LogoutHandler(base_handlers.BaseHandler):
+    def get(self):
+        del self.session["user_info"]
+        self.redirect(uri="/")
