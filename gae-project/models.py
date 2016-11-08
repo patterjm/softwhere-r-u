@@ -6,6 +6,7 @@ class User(ndb.Model):
     """ Information about this user.  There is only 1 of these per user. """
     email = ndb.StringProperty(default="")
     friends = ndb.KeyProperty(kind='User', repeated=True)
+    projects = ndb.KeyProperty(kind='Project', repeated=True)
 
 
 class Profile(ndb.Model):

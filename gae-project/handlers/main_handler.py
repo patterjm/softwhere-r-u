@@ -78,6 +78,14 @@ class UserProfileHandler(base_handlers.BasePage):
         return "templates/user_profile_page.html"
     
     def update_values(self, email, account_info, values):
+        #preload null values to prevent Jinja UndefinedError
+        values["profile"] = None
+        values["is_owner"] = False
+        values["is_friend"] = False
+        values["pending_friend_request"] = False
+        values["is_receiver"] = False
+        values["is_sender"] = False
+        
         if self.request.get('profile_entity_key'):
             profile_entity_key_str = self.request.get('profile_entity_key')
             profile_key = ndb.Key(urlsafe=profile_entity_key_str)
@@ -85,11 +93,12 @@ class UserProfileHandler(base_handlers.BasePage):
         else:
             profile = utils.get_profile_for_email(email)
         if profile:
-            profile_key = profile.key()
+            profile_key = profile.key
             values["profile"] = profile
+            user = utils.get_user_for_email(email)
             #build project list to be rendered in Featured Projects section
             project_list = []
-            for project_key in profile.projects:
+            for project_key in user.projects:
                 project = project_key.get()
                 project_list.append(project)
             values["projects"] = project_list
@@ -101,7 +110,6 @@ class UserProfileHandler(base_handlers.BasePage):
                 values["is_owner"] = False
                 
                 #check if users are friends
-                user = utils.get_user_for_email(email)
                 if profile_key.parent() in user.friends:
                     values["is_friend"] = True
                 else:

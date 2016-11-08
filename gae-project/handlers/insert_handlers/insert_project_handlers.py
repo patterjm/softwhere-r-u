@@ -23,4 +23,7 @@ class InsertNewProjectAction(base_handlers.BaseAction):
         project.administrators = [ndb.Key(urlsafe=self.request.get("user_entity_key"))]
         project.users = [ndb.Key(urlsafe=self.request.get("user_entity_key"))]
         project.put()
+        
+        user = utils.get_user_for_email(email)
+        user.projects.push(project_key)
         self.redirect(self.request.referer)
