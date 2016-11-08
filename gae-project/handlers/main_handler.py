@@ -17,7 +17,7 @@ from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
 import main
-from models import Profile
+from models import Profile, Notification
 import utils
 
 
@@ -36,6 +36,14 @@ class MainHandler(base_handlers.BasePage):
 class ManageProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_projects_page.html"
+    
+    def update_values(self, email, account_info, values):
+        # Subclasses should override this method to add additional data for the Jinja template.
+        project_query = utils.get_query_for_all_projects_for_email(email)
+        logging.info(project_query)
+        for project in project_query:
+            logging.info(project)
+        values["project_query"] = project_query
 
 class AddProjectHandler(base_handlers.BasePage):
     def get_template(self):
@@ -70,20 +78,55 @@ class UserProfileHandler(base_handlers.BasePage):
         return "templates/user_profile_page.html"
     
     def update_values(self, email, account_info, values):
-        if self.request.get('profile_key'):
-            profile = ndb.Key(urlsafe=self.request.get('profile_key')).get()
-            values["profile_owner"] = False
+        if self.request.get('profile_entity_key'):
+            profile_entity_key_str = self.request.get('profile_entity_key')
+            profile_key = ndb.Key(urlsafe=profile_entity_key_str)
+            profile = profile_key.get()
         else:
             profile = utils.get_profile_for_email(email)
-            logging.info(profile)
-            values["profile_owner"] = True
-        if not profile:
-            parent_key = utils.get_parent_key_for_email(email)
-            profile = Profile(parent=account_info.key, id=email)
-            values["profile_owner"] = True
-            values["form_action"] = blobstore.create_upload_url('/insert-profile')
-            profile.put()
-        values["profile"] = profile
+        if profile:
+            profile_key = profile.key()
+            values["profile"] = profile
+            #build project list to be rendered in Featured Projects section
+            project_list = []
+            for project_key in profile.projects:
+                project = project_key.get()
+                project_list.append(project)
+            values["projects"] = project_list
+            
+            #check if accessing user is profile owner    
+            if email == profile_key.id():
+                values["is_owner"] = True
+            else:
+                values["is_owner"] = False
+                
+                #check if users are friends
+                user = utils.get_user_for_email(email)
+                if profile_key.parent() in user.friends:
+                    values["is_friend"] = True
+                else:
+                    #check if accessing user received a friend request from profile owner
+                    notification_receiver_query = Notification.query(Notification.receiver == user.key,
+                                       Notification.sender == profile_key.parent())
+                    for notification in notification_receiver_query:
+                        logging.info("??? GOT RESPONSE FROM NOTIFICATION QUERY")
+                        logging.info(notification)
+                        values["pending_friend_request"] = True
+                        values["is_receiver"] = True
+                        values["is_sender"] = False
+                    
+                    #check if accessing user sent a friend request to profile owner
+                    notification_sender_query = Notification.query(Notification.sender == user.key,
+                                       Notification.receiver == profile_key.parent())
+                    for notification in notification_sender_query:
+                        logging.info("??? GOT RESPONSE FROM NOTIFICATION QUERY")
+                        logging.info(notification)
+                        values["pending_friend_request"] = True
+                        values["is_receiver"] = False
+                        values["is_sender"] = True
+        #set-up modal for uploading blob_images
+        values["form_action"] = blobstore.create_upload_url('/insert-profile')
+
     
 
 class LoginHandler(base_handlers.BaseHandler):

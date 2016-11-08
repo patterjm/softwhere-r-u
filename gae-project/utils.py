@@ -42,7 +42,6 @@ def get_query_for_all_projects_for_email(email):
 
 def get_profile_for_email(email):
     parent_key = get_user_for_email(email).key
-    logging.info(parent_key)
     return Profile.get_by_id(email, parent=parent_key)
 
 def get_user_for_email(email):

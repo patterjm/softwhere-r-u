@@ -14,7 +14,7 @@ class Profile(ndb.Model):
     location = ndb.StringProperty()
     description = ndb.TextProperty()
     picture = ndb.BlobKeyProperty()
-    dob = ndb.DateTimeProperty()
+    dob = ndb.DateProperty()
 
 
 class Account(ndb.Model):

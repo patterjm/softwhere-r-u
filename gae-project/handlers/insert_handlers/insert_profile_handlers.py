@@ -16,6 +16,7 @@ from webapp2_extras import sessions
 from handlers import base_handlers
 from models import Profile
 import utils
+from datetime import datetime
 
 
 class InsertNewProfileAction(blobstore_handlers.BlobstoreUploadHandler):
@@ -33,7 +34,6 @@ class InsertNewProfileAction(blobstore_handlers.BlobstoreUploadHandler):
     def session(self):
         # Returns a session using the default cookie key.
         return self.session_store.get_session()
-    """ALL action handlers should inherit from this one."""
     
     def post(self):
       user = users.get_current_user()
@@ -57,6 +57,7 @@ class InsertNewProfileAction(blobstore_handlers.BlobstoreUploadHandler):
             profile = profile_key.get()
         else:
             profile = Profile(parent=account_info.key, id=email)
+            profile_key = profile.key.urlsafe()
             
         if self.get_uploads() and len(self.get_uploads()) == 1:
             logging.info("Received an image blob with this profile update.")
@@ -72,6 +73,8 @@ class InsertNewProfileAction(blobstore_handlers.BlobstoreUploadHandler):
         profile.name = self.request.get("name")
         profile.location = self.request.get("location")
         profile.description = self.request.get("description")
-        profile.dob = self.request.get("dob")
+        profile.dob = datetime.strptime(self.request.get("dob"), "%Y-%m-%d")
         profile.put()
-        self.redirect(self.request.referer)
+        url_redir_str = "./user-profile?profile_entity_key=" + profile_key
+        logging.info(url_redir_str)
+        self.redirect(url_redir_str)
