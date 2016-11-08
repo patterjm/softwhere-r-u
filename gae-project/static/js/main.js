@@ -1,6 +1,6 @@
 var softwareRU = softwareRU || {};
 softwareRU.enableButtons = function(){
-	$("#notification_li").click(function(){
+	$("#notification_li").hover(function(){
 		$("#notificationContainer").toggle();
 		
 	});
