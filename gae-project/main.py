@@ -3,11 +3,10 @@ import os
 import jinja2
 import webapp2
 
-from handlers import main_handler
-from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers,\
-    insert_notification_handlers
+from handlers import main_handler, blob_handler
 from handlers.delete_handlers import delete_notification_handlers
-
+from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers, \
+    insert_notification_handlers
 
 
 # Jinja environment instance necessary to use Jinja templates.
@@ -44,5 +43,7 @@ app = webapp2.WSGIApplication([
     
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     
+    
+    ('/pics/([^/]+)?', blob_handler.BlobServer),
     
 ], config=config, debug=True)

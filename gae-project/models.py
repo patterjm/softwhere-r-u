@@ -13,7 +13,7 @@ class Profile(ndb.Model):
     name = ndb.StringProperty()
     location = ndb.StringProperty()
     description = ndb.TextProperty()
-    picture = ndb.BlobProperty()
+    picture = ndb.BlobKeyProperty()
     dob = ndb.DateTimeProperty()
 
 

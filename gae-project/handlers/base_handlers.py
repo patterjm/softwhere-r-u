@@ -1,4 +1,5 @@
 
+import json
 import logging
 
 from google.appengine.api import users
@@ -26,8 +27,6 @@ class BaseHandler(webapp2.RequestHandler):
         # Returns a session using the default cookie key.
         return self.session_store.get_session()
 
-# Potentially helpful (or not) superclass for *logged in* pages and actions (assumes app.yaml gaurds for login)
-### Pages ###
 class BasePage(BaseHandler):
   """Page handlers should inherit from this one."""
   def get(self):

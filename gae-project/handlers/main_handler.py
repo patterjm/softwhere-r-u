@@ -3,18 +3,21 @@ Created on Oct 17, 2016
 
 @author: patterjm
 '''
+import json
+import json
 import logging
 
 from google.appengine.api import users
+from google.appengine.api.blobstore import blobstore
 from google.appengine.ext import ndb
 import webapp2
 from webapp2_extras import sessions
-import json
+
 from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
 import main
-from models import Profile, Project
+from models import Profile
 import utils
 
 
@@ -37,7 +40,6 @@ class ManageProjectsHandler(base_handlers.BasePage):
 class AddProjectHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/add_project_page.html"
-    
     
 class AddProfileHandler(base_handlers.BasePage):
     def get_template(self):
@@ -79,14 +81,16 @@ class UserProfileHandler(base_handlers.BasePage):
             parent_key = utils.get_parent_key_for_email(email)
             profile = Profile(parent=account_info.key, id=email)
             values["profile_owner"] = True
+            values["form_action"] = blobstore.create_upload_url('/insert-profile')
             profile.put()
         values["profile"] = profile
     
+
 class LoginHandler(base_handlers.BaseHandler):
     """Custom page to handle multiple methods of user authentication"""
     def get(self):
         user = users.get_current_user()
-        if user:
+        if user or "user_info" in self.session:
             self.redirect("/")
         values = {"login_url": users.create_login_url("/")}
         template = main.jinja_env.get_template(self.get_template())

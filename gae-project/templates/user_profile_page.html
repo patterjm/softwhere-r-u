@@ -1,17 +1,23 @@
 {% extends "templates/base_page.html" %} {% block content %}
 <h2>User Profile</h2>
 <hr>
-
 <div class="myContainer UPContainer">
 	<div class="topBox">
 		<div class="leftBox up">
 			<img src="static/pics/1.pic.jpg">
+			<div id="current-img">
+			    <input type="hidden" name="original_blob_key" value={{profile.picture}}>
+			    <img src="/pics/{{profile.picture}}" alt="image" height="240" border="1"><br><br>
+			</div>
 		</div>
 		<div class="rightBox up">
 			<p class="profile-font">Name: <span id="profile-name">{{ profile.name }}</span></p>
 			<p class="profile-font">Location: <span id="profile-location">{{ profile.location }}</span></p>
 			<p class="profile-font">Date of Birth: <span id="profile-birthday">{{ profile.dob }}</span></p>
-			{% if profile_owner == True %}<button type="button" class="btn btn-primary">Edit your profile</button>
+			{% if profile_owner == True %}
+			<a id="modify-profile-link" href="#" data-toggle="modal" data-target="#insert-profile-modal">
+				<button type="button" id="edit-profile" class="btn btn-primary">Edit your profile</button>
+			</a>
 			{% else %}
 			<form action="/insert-notification" method="POST">
 				<input name="sender" type="hidden" value="{{ account_info.key.urlsafe() }}">
@@ -23,6 +29,7 @@
 		</div>
 	</div>
 	<div class="botBox">
+		<span id="profile-description">{{ profile.description }}</span>
 		<h4>Interest: </h4>
 		<p>Javascript, food</p>
 		<h4>Featured Projects:</h4>
@@ -30,6 +37,56 @@
 	</div>
 </div>
 
-
+<div class="modal fade" id="insert-profile-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Profile">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit your profile</h4>
+      </div>
+      <form action="{{ form_action }}" method="POST" enctype="multipart/form-data">
+		<div class="modal-body">
+		  <div class="form-group">
+		    <label for="image-input" class="col-sm-2">Image:</label>
+		    <div class="col-sm-10">
+		      <input id="img-input" type="file" name="image">
+		      <br />
+		  	</div>
+		  </div>
+		  <div class="form-group">
+		    <label for="name-input" class="col-sm-2">Name:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" placeholder="Profile name" name="name" value="{{ profile.name }}">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="location-input" class="col-sm-2">Location:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" placeholder="Location" name="location" value="{{ profile.location }}">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="dob-input" class="col-sm-2">Birthday:</label>
+		    <div class="col-sm-10">
+		    <div class="input-group input-append date" data-provide="datepicker">
+			    <input type="text" class="form-control" placeholder="MM/DD/YYYY" name="dob">
+			</div> 
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label for="description-input" class="col-sm-2">Description:</label>
+		    <div class="col-sm-10">
+		    <input type="text" class="form-control" placeholder="Describe yourself!" name="description" value="{{ profile.description }}">
+		    </div>
+		  </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+	        <button type="submit" class="btn btn-primary">Save Changes</button>
+	      </div>
+      	</form>
+    </div>
+  </div>
+</div>
 
 {% endblock%}
