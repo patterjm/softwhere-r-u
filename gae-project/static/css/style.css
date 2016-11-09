@@ -39,6 +39,7 @@ html, body {
 	margin-bot: 10px;
 	margin-left: 5%;
 	margin-right: 5%;
+	overflow:hidden;
 }
 
 .projectBox.userBox {
@@ -50,7 +51,7 @@ html, body {
 	top: 10%;
 	left: 5%;
 	width: 90%;
-	padding-bottom:10%;
+	padding-bottom: 10%;
 }
 
 .leftBox {
@@ -58,8 +59,12 @@ html, body {
 	height: 100%;
 	width: 20%;
 	float: left;
+	overflow:hidden;
 }
 
+.botdiv{
+	display:none;
+}
 .rightBox {
 	position: relative;
 	height: 100%;
@@ -83,34 +88,11 @@ html, body {
 	margin: 3px;
 	clear: right;
 }
+
 .leftBox>p {
-		margin-left:20%;
+	margin-left: 20%;
 }
-@media screen and (max-width:600px) {
-	.midContainer {
-		width: 80%;
-		height:70%;
-	}
-	.rightBox {
-		display: none;
-	}
-	.leftBox {
-		width: 100%;
-		float: none;
-		text-align: center;
-	}
-	.projectPic {
-		position: relative;
-		display: block;
-		margin: auto;
-		margin-top: 10%;
-		margin-left:0;
-	}
-	.leftBox>p {
-		font-size: 5vw;
-		margin-top:10px;
-	}
-}
+
 
 #notification_li {
 	position: relative
@@ -326,4 +308,44 @@ tr:nth-child(even) {
 li a {
 	padding: 0px, 0px, 0px, 0px;
 }
+@media screen and (max-width:600px) {
+	.midContainer {
+		width: 80%;
+		height: 70%;
+	}
+	.rightBox {
+		display: none;
+	}
+	.leftBox {
+		width: 100%;
+		float: none;
+		text-align: center;
+	}
+	.projectPic {
+		position: relative;
+		display: block;
+		margin: auto; top : 0; left : 0; right : 0; bottom : 0;
+		width: 25vw;
+		height: 25vw;
+		top: 3vw;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.leftBox>p {
+		font-size: 4vw;
+		margin-top: 1vw;
+		margin-left:0;
+	}
+	
+	.leftBox.up{
+		width:100%;
+	}
+	
+	.botdiv{
+		display:block;
+	}
+	
+}
+
 

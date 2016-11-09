@@ -6,125 +6,164 @@
 	<div class="topBox">
 		<div class="leftBox up">
 			<div id="current-img">
-			    <input type="hidden" name="original_blob_key" value={{profile.picture}}>
-			    <img src="/pics/{{profile.picture}}" alt="image" height="240" border="1"><br><br>
+				<input type="hidden" name="original_blob_key"
+					value={{profile.picture}}> <img
+					src="/pics/{{profile.picture}}" alt="image" height="240" border="1"
+					class="projectPic">
+				<div class="botdiv">
+					<a id="modify-profile-link" href="#" data-toggle="modal"
+						data-target="#insert-profile-modal">
+						<button type="button" id="edit-profile" class="btn btn-primary">Edit
+							your profile</button>
+					</a>
+				</div>
+				<br>
+				<br>
 			</div>
 		</div>
 		<div class="rightBox up">
-			<p class="profile-font">Name: <span id="profile-name">{{ profile.name }}</span></p>
-			<p class="profile-font">Location: <span id="profile-location">{{ profile.location }}</span></p>
-			<p class="profile-font">Date of Birth: <span id="profile-birthday">{{ profile.dob }}</span></p>
-			{% if is_owner == True %}
-			<a id="modify-profile-link" href="#" data-toggle="modal" data-target="#insert-profile-modal">
-				<button type="button" id="edit-profile" class="btn btn-primary">Edit your profile</button>
-			</a>
-			{% else %}
-			{% if pending_friend_request == False and is_friend == False %}
+			<p class="profile-font">
+				Name: <span id="profile-name">{{ profile.name }}</span>
+			</p>
+			<p class="profile-font">
+				Location: <span id="profile-location">{{ profile.location }}</span>
+			</p>
+			<p class="profile-font">
+				Date of Birth: <span id="profile-birthday">{{ profile.dob }}</span>
+			</p>
+			{% if is_owner == True %} <a id="modify-profile-link" href="#"
+				data-toggle="modal" data-target="#insert-profile-modal">
+				<button type="button" id="edit-profile" class="btn btn-primary">Edit
+					your profile</button>
+			</a> {% else %} {% if pending_friend_request == False and is_friend ==
+			False %}
 			<form action="/insert-notification" method="POST">
-				<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
-				<input name="receiver_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
-				<input name="type" type="hidden" value="collaborator">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="receiver_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}"> <input
+					name="type" type="hidden" value="collaborator">
 				<button type="submit" class="btn btn-primary">Add friend</button>
 			</form>
-			{% endif %}
-			{% if is_friend == True %}
+			{% endif %} {% if is_friend == True %}
 			<form action="/delete-friend" method="POST">
-				<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
-				<input name="former-friend" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="former-friend" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
 				<button type="submit" class="btn btn-primary">Remove friend</button>
 			</form>
-			{% endif %}
-			{% if pending_friend_request == True %}
-				<span>Friend Request pending</span>
-				{% if is_sender == True %}
-				<form action="/delete-notification" method="POST">
-					<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
-					<input name="receiver_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
-					<button type="submit" class="btn btn-primary">Cancel request</button>
-				</form>
-				{% endif %}
-				{% if is_receiver == True %}
-				<form action="/delete-notification" method="POST">
-					<input name="receiver_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
-					<input name="sender_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">										
-					<button type="submit" name="type-accept" value="accept">Accept friend request</button>
-					<button type="submit" name="type-reject" value="reject">Reject friend request</button>
-				</form>
-				{% endif %}
-			{% endif %}
-			{% endif %}
+			{% endif %} {% if pending_friend_request == True %} <span>Friend
+				Request pending</span> {% if is_sender == True %}
+			<form action="/delete-notification" method="POST">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="receiver_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" class="btn btn-primary">Cancel
+					request</button>
+			</form>
+			{% endif %} {% if is_receiver == True %}
+			<form action="/delete-notification" method="POST">
+				<input name="receiver_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="sender_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" name="type-accept" value="accept">Accept
+					friend request</button>
+				<button type="submit" name="type-reject" value="reject">Reject
+					friend request</button>
+			</form>
+			{% endif %} {% endif %} {% endif %}
 		</div>
 	</div>
 	<div class="botBox">
 		<span id="profile-description">{{ profile.description }}</span>
-		<h4>Interest: </h4>
+		<h4>Interest:</h4>
 		<p>Javascript, food</p>
 		<h4>Featured Projects:</h4>
-		{% for project in projects %}
-			<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a>
-		{% endfor %}
+		{% for project in projects %} <a
+			href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
+			project.title }}</a> {% endfor %}
 	</div>
 </div>
 {% else %}
-<div>Whoops! It seems you don't have a profile yet. Feel free to start by creating a profile below.</div>
-<a id="modify-profile-link" href="#" data-toggle="modal" data-target="#insert-profile-modal">
-	<button type="button" id="edit-profile" class="btn btn-primary">Create your profile</button>
+<div>Whoops! It seems you don't have a profile yet. Feel free to
+	start by creating a profile below.</div>
+<a id="modify-profile-link" href="#" data-toggle="modal"
+	data-target="#insert-profile-modal">
+	<button type="button" id="edit-profile" class="btn btn-primary">Create
+		your profile</button>
 </a>
 {% endif %}
 
-<div class="modal fade" id="insert-profile-modal" tabindex="-1" role="dialog" aria-labelledby="Edit Profile">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit your profile</h4>
-      </div>
-      <form action="{{ form_action }}" method="POST" enctype="multipart/form-data">
-		<div class="modal-body">
-		  <div class="form-group">
-		    <label for="image-input" class="col-sm-2">Image:</label>
-		    <div class="col-sm-10">
-		    {% if profile %}
-		      <input type="hidden" name="original_blob_key" value="{{ profile.picture }}">
-		      <img id="img-modal-value" src="/pics/{{ profile.picture }}" alt="image" height="240" border="1"><br><br>
-		      <input id="img-input" type="file" name="image">
-		    {% endif %}
-		  	</div>
-		  </div>
-		  <div class="form-group">
-		    <label for="name-input" class="col-sm-2">Name:</label>
-		    <div class="col-sm-10">
-		    <input type="text" class="form-control" placeholder="Profile name" name="name" {% if profile %} value="{{ profile.name }}" {% endif %}>
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="location-input" class="col-sm-2">Location:</label>
-		    <div class="col-sm-10">
-		    <input type="text" class="form-control" placeholder="Location" name="location" {% if profile %} value="{{ profile.location }}" {% endif %}>
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="dob-input" class="col-sm-2">Birthday:</label>
-		    <div class="col-sm-10">
-		    <div class="input-group input-append date" data-provide="datepicker">
-			    <input type="text" class="form-control" placeholder="YYYY-MM-DD" name="dob" {% if profile %} value="{{ profile.dob }}" {% endif %}>
-			</div> 
-		    </div>
-		  </div>
-		  <div class="form-group">
-		    <label for="description-input" class="col-sm-2">Description:</label>
-		    <div class="col-sm-10">
-		    <input type="text" class="form-control" placeholder="Describe yourself!" name="description" value="{{ profile.description }}">
-		    </div>
-		  </div>
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-	        <button type="submit" class="btn btn-primary">{% if profile %} Save Changes {% else %} Add Profile {% endif %}</button>
-	      </div>
-      	</form>
-    </div>
-  </div>
+<div class="modal fade" id="insert-profile-modal" tabindex="-1"
+	role="dialog" aria-labelledby="Edit Profile">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">Edit your profile</h4>
+			</div>
+			<form action="{{ form_action }}" method="POST"
+				enctype="multipart/form-data">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="image-input" class="col-sm-2">Image:</label>
+						<div class="col-sm-10">
+							{% if profile %} <input type="hidden" name="original_blob_key"
+								value="{{ profile.picture }}"> <img id="img-modal-value"
+								src="/pics/{{ profile.picture }}" alt="image" height="240"
+								border="1"><br>
+							<br> <input id="img-input" type="file" name="image">
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="name-input" class="col-sm-2">Name:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control"
+								placeholder="Profile name" name="name" {% if
+								profile %} value="{{ profile.name }}"{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="location-input" class="col-sm-2">Location:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="Location"
+								name="location" {% if profile %} value="{{ profile.location }}"{% endif %}>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="dob-input" class="col-sm-2">Birthday:</label>
+						<div class="col-sm-10">
+							<div class="input-group input-append date"
+								data-provide="datepicker">
+								<input type="text" class="form-control" placeholder="YYYY-MM-DD"
+									name="dob" {% if profile %} value="{{ profile.dob }}"{% endif %}>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="description-input" class="col-sm-2">Description:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control"
+								placeholder="Describe yourself!" name="description"
+								value="{{ profile.description }}">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-primary">{% if
+						profile %} Save Changes {% else %} Add Profile {% endif %}</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

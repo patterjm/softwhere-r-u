@@ -57,7 +57,6 @@
 						aria-expanded="false">Profile <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="/add-project">Add Project</a></li>
-							<li><a href="/manage-projects">Manage Project</a></li>
 							<li><a href="/add-friends">Add Friend</a></li>
 							<li><a href="/manage-friends">Manage Friends</a></li>
 							<li role="separator" class="divider"></li>
@@ -82,8 +81,8 @@
 											value="{{ notification.key.urlsafe() }}"> <input
 											name="sender_entity_key" type="hidden"
 											value="{{ notification.sender.urlsafe() }}">
-										<button type="submit" name="type-accept" value="accept">Accept</button>
-										<button type="submit" name="type-reject" value="reject">Reject</button>
+										<button type="submit" name="type-accept" value="accept" class="btn btn-primary">Accept</button>
+										<button type="submit" name="type-reject" value="reject" class="btn btn-primary">Reject</button>
 									</form>
 									<br />
 								</div>

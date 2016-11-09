@@ -27,7 +27,6 @@ config['webapp2_extras.sessions'] = {
 }
 app = webapp2.WSGIApplication([
     ('/', main_handler.MainHandler),
-    ('/manage-projects', main_handler.ManageProjectsHandler),
     ('/add-project', main_handler.AddProjectHandler),    
     ('/login-page', main_handler.LoginHandler),
     ('/add-friends', main_handler.AddFriendsHandler),

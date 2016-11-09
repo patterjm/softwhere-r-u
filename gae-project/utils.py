@@ -18,9 +18,11 @@ def get_query_for_all_user_profiles(email):
     friends = user.friends
     logging.info(friends)
     qry =  Profile.query(Profile.key != email_key)
+    logging.info(qry.count())
     for friend in friends:
-        logging.info(friend.urlsafe())
-        qry = qry.filter(ndb.AND(friend!=Profile.key))
+        friend_profile_key = get_profile_for_email(friend.id()).key
+        qry = qry.filter(ndb.AND(friend_profile_key!=Profile.key))
+        logging.info(qry.count())
     return qry
 
 def get_self_profile(email):
