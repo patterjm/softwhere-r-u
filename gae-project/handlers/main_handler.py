@@ -115,6 +115,7 @@ class ProjectDetailHandler(base_handlers.BasePage):
         values["active_collaboration_request"] = False
         values["is_sender"] = False
         values["is_receiver"] = False
+        values["form_action"] = blobstore.create_upload_url('/insert-project-text')
         
         if self.request.get('project_entity_key'):
             project_entity_key_str = self.request.get('project_entity_key')

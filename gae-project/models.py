@@ -44,6 +44,7 @@ class Project(ndb.Model):
     """ Project object. Users can have and manage these """
     title = ndb.StringProperty()
     description = ndb.TextProperty()
+    picture = ndb.BlobKeyProperty()
     administrators = ndb.KeyProperty(kind='User', repeated=True)
     date_created = ndb.DateTimeProperty(auto_now=True)
     users = ndb.KeyProperty(kind='User', repeated=True)

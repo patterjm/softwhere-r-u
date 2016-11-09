@@ -14,22 +14,6 @@ import utils
 
 
 class InsertNewNotificationAction(base_handlers.BaseAction):
-    def post(self):
-        self.response.headers['Content-Type'] = 'application/json'
-        logging.info(self.request.get("receiver"))
-        receiver = ndb.Key(urlsafe=self.request.get("receiver"))
-        logging.info(receiver)
-        receiver_user = receiver.get().key.parent()
-        logging.info(receiver_user)
-        notification = Notification(parent=receiver_user)
-        
-        notification.receiver = receiver_user
-        notification.sender = ndb.Key(urlsafe=self.request.get("sender"))
-        notification.message = self.request.get("message")
-        notification.put()
-        response = notification.key.urlsafe()
-        self.response.out.write(json.dumps(response))
-
     def handle_post(self, email, account_info):
         if self.request.get("notification_entity_key"):
             notification_key = ndb.Key(urlsafe=self.request.get("notification_entity_key"))

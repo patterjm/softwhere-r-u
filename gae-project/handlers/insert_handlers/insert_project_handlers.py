@@ -3,10 +3,16 @@ Created on Oct 17, 2016
 
 @author: patterjm
 '''
+import json
 import logging
 
+from google.appengine.api import users
+from google.appengine.api.blobstore.blobstore import BlobKey
 from google.appengine.datastore.datastore_query import FilterPredicate
 from google.appengine.ext import ndb
+from google.appengine.ext.webapp import blobstore_handlers
+import webapp2
+from webapp2_extras import sessions
 
 from handlers import base_handlers
 from models import Project, Profile
@@ -106,6 +112,67 @@ class UpdateProjectStatus(base_handlers.BaseAction):
             project.status = project.ProjectStatus.ARCHIVED
         elif complete:
             project.status = project.ProjectStatus.COMPLETED
+        
+        project.put()
+        
+        self.redirect(self.request.referer)
+        
+class UpdateProjectText(blobstore_handlers.BlobstoreUploadHandler):
+    def dispatch(self):
+        # Get a session store for this request.
+        self.session_store = sessions.get_store(request=self.request)
+        try:
+            # Dispatch the request.
+            webapp2.RequestHandler.dispatch(self)
+        finally:
+            # Save all sessions.
+            self.session_store.save_sessions(self.response)
+
+    @webapp2.cached_property
+    def session(self):
+        # Returns a session using the default cookie key.
+        return self.session_store.get_session()
+    
+    def post(self):
+      user = users.get_current_user()
+      if not user and "user_info" not in self.session:
+        raise Exception("Missing user!")
+      if user:
+          email = user.email().lower()
+      elif "user_info" in self.session:
+          jsonVar = json.loads(self.session["user_info"])
+          email = jsonVar["email"].lower()
+      account_info = utils.get_account_info_for_email(email)
+      self.handle_post(email, account_info)
+
+
+    def get(self):
+        self.post()  # Action handlers should not use get requests.
+    
+    def handle_post(self, email, account_info):
+        if self.request.get("project_entity_key"):
+            project_key = ndb.Key(urlsafe=self.request.get("project_entity_key"))
+            project = project_key.get()
+        else:
+            project = Project(parent=utils.get_parent_key_for_email(email))
+            project_key = project.key
+        
+        title = self.request.get("title")
+        description = self.request.get("description")
+        project.title = title
+        project.description = description
+        
+        if self.get_uploads() and len(self.get_uploads()) == 1:
+            logging.info("Received an image blob with this profile update.")
+            media_blob = self.get_uploads()[0]
+            project.picture = media_blob.key()
+        else:
+            # There is a chance this is an edit in which case we should check for an existing blob key.
+            original_blob_key = self.request.get("original_blob_key")
+            if original_blob_key:
+                logging.info("Attaching original blob key (this must have been an edit or duplicate)")
+                project.picture = BlobKey(original_blob_key)
+        
         
         project.put()
         

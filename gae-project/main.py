@@ -40,6 +40,7 @@ app = webapp2.WSGIApplication([
     ('/logout', main_handler.LogoutHandler),
     
     ('/insert-project', insert_project_handlers.InsertNewProjectAction),
+    ('/insert-project-text', insert_project_handlers.UpdateProjectText),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
     ('/insert-many-notifications', insert_notification_handlers.InsertManyNotifications),
