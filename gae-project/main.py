@@ -37,9 +37,14 @@ app = webapp2.WSGIApplication([
     ('/user-profile', main_handler.UserProfileHandler),
     ('/temp-add-profile', main_handler.AddProfileHandler),
     ('/logout', main_handler.LogoutHandler),
+    
     ('/insert-project', insert_project_handlers.InsertNewProjectAction),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
+    ('/insert-many-notifications', insert_notification_handlers.InsertManyNotifications),
+    
+    ('/update-project-administrators', insert_project_handlers.UpdateProjectAdministrators),
+    ('/update-project-users', insert_project_handlers.UpdateProjectUsers),
     
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     

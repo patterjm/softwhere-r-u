@@ -13,9 +13,9 @@
 			<tbody>
 				{% for project in project_query %}
 				<tr>
-					<td>{{ project.title }}</td>
-					<td>{{ project.description }}</td>
-					<td style="display:none">{{project.key}}</td>
+					<td>{{ project.get().title }}</td>
+					<td>{{ project.get().description }}</td>
+					<td style="display:none">{{project.urlsafe()}}</td>
 				</tr>
 				{% endfor %}
 			</tbody>

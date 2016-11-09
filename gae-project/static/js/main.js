@@ -10,10 +10,29 @@ softwareRU.enableButtons = function(){
 	});
 	
 	$('.table > tbody > tr').click(function() {
-		console.log(111);
+		var projectKeyString = $(this).children("td:nth-child(3)").text();
+		window.location.replace("./project-detail?project_entity_key="+projectKeyString);
 	});
 	
 	$('input[name=dob]').datepicker();
+	
+	$(".collaborator_input").keyup(function(){
+		if($(this).parent().nextAll(".collaborator_div").length == 0){
+			if($(this).next().length == 0){
+				$(this).after("<button class=\"btn-danger remove_collaborator pull-right\"><span class=\"glyphicon glyphicon-remove\"></span></button>");
+				$(".remove_collaborator").click(function(){
+					if($(".collaborator-form-div").children(".collaborator_div").length > 1){
+						$(this).parent().remove();
+					}else{
+						$(this).remove();
+					}
+				});
+			}
+			var nextElem = $(this).parent('div').clone(true);
+			nextElem.children()[0].value = "";
+			nextElem.appendTo('.collaborator-form-div');
+		}
+	});
 };
 
 softwareRU.enableSearch = function(){
