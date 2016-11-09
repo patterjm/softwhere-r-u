@@ -14,12 +14,32 @@ import utils
 
 
 class InsertNewNotificationAction(base_handlers.BaseAction):
+    def handle_post(self, email, account_info):
+        if self.request.get("notification_entity_key"):
+            notification_key = ndb.Key(urlsafe=self.request.get("notification_entity_key"))
+            notification = notification_key.get()
+        else:
+            receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
+            receiver_user = receiver.parent()
+            logging.info(receiver_user)
+            notification = Notification(parent=receiver_user)
+        
+        notification.receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
+        notification.sender = ndb.Key(urlsafe=self.request.get("sender_entity_key"))
+        notification_type = self.request.get("type")
+        profile = Profile.query(ancestor=notification.sender).fetch(1)[0]
+        if notification_type == "collaborator":
+            notification.message = profile.name + " would like to be your friend."
+        notification.put()
+        self.redirect(self.request.referer)
+        
+class InsertNotificationActionAjax(base_handlers.BaseAction):
     def post(self):
         self.response.headers['Content-Type'] = 'application/json'
         logging.info(self.request.get("receiver"))
         receiver = ndb.Key(urlsafe=self.request.get("receiver"))
         logging.info(receiver)
-        receiver_user = receiver.get().key.parent()
+        receiver_user = receiver.parent()
         logging.info(receiver_user)
         notification = Notification(parent=receiver_user)
         
@@ -29,23 +49,6 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
         notification.put()
         response = notification.key.urlsafe()
         self.response.out.write(json.dumps(response))
-    def handle_post(self, email, account_info):
-        if self.request.get("notification_entity_key"):
-            notification_key = ndb.Key(urlsafe=self.request.get("notification_entity_key"))
-            notification = notification_key.get()
-        else:
-            receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
-            receiver_user = receiver.get().key.parent()
-            logging.info(receiver_user)
-            notification = Notification(parent=receiver_user)
-        
-        notification.receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
-        notification.sender = ndb.Key(urlsafe=self.request.get("sender_entity_key"))
-        notification_type = self.request.get("type")
-        if notification_type == "collaborator":
-            notification.message = "User would like to be your friend."
-        notification.put()
-        self.redirect(self.request.referer)
         
 class InsertManyNotifications(base_handlers.BaseAction):
     def handle_post(self, email, account_info):

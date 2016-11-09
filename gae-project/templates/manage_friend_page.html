@@ -11,68 +11,29 @@
 		</div>
 	</form>
 	<!-- Considering split the projectBox div to more different divs, probably doing this in the future-->
+	{% for profile in profile_list %}
 	<div class="projectBox userBox">
+		<a href="./user-profile?profile_entity_key={{ profile.key.urlsafe() }}">
 		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>George</p>
+			{% if profile.picture %}
+			<img src="/pics/{{ profile.picture }}" class="projectPic" />
+			{% else %}
+			<img src="/static/pics/no-image.png" class="projectPic" />
+			{% endif %}
+			<p>{{ profile.name }}</p>
 		</div>
+		</a>
 		<div class="rightBox">
 			<div class="projectButtonBox">
-				<button type="button" class="btn btn-warning projectButton">Delete
-					Friend</button>
-
+				<form action="/delete-friend" method="POST">
+					<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
+					<input name="former-friend" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
+					<button type="submit" class="btn btn-warning projectButton">Remove friend</button>
+				</form>
 			</div>
 		</div>
 	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Jake</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-warning projectButton">Delete
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Jim</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-warning projectButton">Delete
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Mitch</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-warning projectButton">Delete
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Max</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-warning projectButton">Delete
-					Friend</button>
-			</div>
-		</div>
-	</div>
-
+	{% endfor %}
 </div>
 
 
