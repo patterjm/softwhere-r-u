@@ -5,15 +5,19 @@
 <div class="myContainer UPContainer">
 	<div class="topBox">
 		<div class="leftBox up">
-			<img src="static/pics/test.png">
+			{% if project.picture %}
+			<img src="/pics/{{ project.picture }}" class="projectPic" />
+			{% else %}
+			<img src="/static/pics/no-image.png" class="projectPic" />
+			{% endif %}
 		</div>
 		<div class="rightBox up">
-			{% if project.status == 0 %}
-				<div>Note: this project is Archived and can no longer be edited.</div>
-			{% elif project.status == 2 %}
-				<div>Note: this project is Completed and can no longer be edited.</div>
-			{% else %}
-			<p class="profile-font">Created on: {{ project.date_created }}</p>
+			{% if project.status == project.ProjectStatus.ARCHIVED %}
+				<p><span>Note: this project is Archived and can no longer be edited.</span></p>
+			{% elif project.status == project.ProjectStatus.COMPLETED %}
+				<p><span>Note: this project is Completed and can no longer be edited.</span></p>
+			{% endif %}
+			<p class="profile-font">Created on: {{ project.date_created.strftime('%d-%m-%Y') }}</p>
 			<p class="profile-font">Title: {{ project.title }}</p>
 			<p class="profile-font">Collaborators: 
 			{% for profile in profiles %}
@@ -42,11 +46,10 @@
 				<button type="button" class="btn btn-primary ">Remove from Group</button>
 				</a>
 			{% endif %}
-			{% endif %}
 		</div>
 	</div>
 	<div class="botBox">
-		<div>{{ project.description }}</div>
+		<p>{{ project.description }}</p>
 	</div>
 </div>
 
@@ -145,6 +148,8 @@
     </div>
   </div>
 </div>
+
+
 
 {% else %}
 <div>Whoops! It seems you followed a broken link.</div>

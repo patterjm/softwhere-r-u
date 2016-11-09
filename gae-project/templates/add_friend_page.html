@@ -16,7 +16,11 @@
 	{% for profile in profile_query%}
 	<div class="projectBox userBox">
 		<div class="leftBox">
-			<img src="pics/{{profile.picture}}" class="projectPic" />
+			{% if profile.picture %}
+			<img src="/pics/{{ profile.picture }}" class="projectPic" />
+			{% else %}
+			<img src="/static/pics/no-image.png" class="projectPic" />
+			{% endif %}
 			<p>{{profile.name}}</p>
 		</div>
 		<div class="rightBox">

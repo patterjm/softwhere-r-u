@@ -48,6 +48,18 @@ class AddProfileHandler(base_handlers.BasePage):
 class ManageFriendsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_friend_page.html"
+    
+    def update_values(self, email, account_info, values):
+        user = account_info
+        friends_list = []
+        profile_list = []
+        for friend_key in user.friends:
+            friend = friend_key.get()
+            profile = utils.get_profile_for_email(friend_key.id())
+            friends_list.append(friend)
+            profile_list.append(profile)
+        values["friends_list"] = friends_list
+        values["profile_list"] = profile_list
    
 class AddFriendsHandler(base_handlers.BasePage):
     def get_template(self):

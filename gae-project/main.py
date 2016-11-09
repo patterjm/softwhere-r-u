@@ -4,7 +4,8 @@ import jinja2
 import webapp2
 
 from handlers import main_handler, blob_handler
-from handlers.delete_handlers import delete_notification_handlers
+from handlers.delete_handlers import delete_notification_handlers, \
+    delete_user_handlers
 from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers, \
     insert_notification_handlers
 
@@ -42,10 +43,10 @@ app = webapp2.WSGIApplication([
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
     ('/insert-many-notifications', insert_notification_handlers.InsertManyNotifications),
-    
+    ('/update-project-status', insert_project_handlers.UpdateProjectStatus),
     ('/update-project-administrators', insert_project_handlers.UpdateProjectAdministrators),
     ('/update-project-users', insert_project_handlers.UpdateProjectUsers),
-    
+    ('/delete-friend', delete_user_handlers.DeleteFriendAction),
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     ('/cancel-friendrequest' ,main_handler.CancelRequestHandler), 
     ('/check-notification', main_handler.CheckNotiHandler),

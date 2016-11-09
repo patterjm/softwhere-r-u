@@ -14,19 +14,6 @@ import utils
 
 
 class InsertNewNotificationAction(base_handlers.BaseAction):
-    def post(self):
-        self.response.headers['Content-Type'] = 'application/json'
-        logging.info(self.request.get("receiver"))
-        receiver = ndb.Key(urlsafe=self.request.get("receiver"))
-        receiver_user = receiver.get().key.parent()
-        notification = Notification(parent=receiver_user)
-        
-        notification.receiver = receiver_user
-        notification.sender = ndb.Key(urlsafe=self.request.get("sender"))
-        notification.message = self.request.get("message")
-        notification.put()
-        response = notification.key.urlsafe()
-        self.response.out.write(json.dumps(response))
     def handle_post(self, email, account_info):
         if self.request.get("notification_entity_key"):
             notification_key = ndb.Key(urlsafe=self.request.get("notification_entity_key"))
@@ -40,8 +27,9 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
         notification.receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
         notification.sender = ndb.Key(urlsafe=self.request.get("sender_entity_key"))
         notification_type = self.request.get("type")
+        profile = Profile.query(ancestor=notification.sender).fetch(1)[0]
         if notification_type == "collaborator":
-            notification.message = "User would like to be your friend."
+            notification.message = profile.name + " would like to be your friend."
         notification.put()
         self.redirect(self.request.referer)
         

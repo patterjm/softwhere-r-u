@@ -7,7 +7,11 @@
 		<div class="leftBox up">
 			<div id="current-img">
 			    <input type="hidden" name="original_blob_key" value={{profile.picture}}>
-			    <img src="/pics/{{profile.picture}}" alt="image" height="240" border="1"><br><br>
+			    {% if profile.picture %}
+				<img src="/pics/{{ profile.picture }}" class="projectPic" />
+				{% else %}
+				<img src="/static/pics/no-image.png" class="projectPic" />
+				{% endif %}
 			</div>
 		</div>
 		<div class="rightBox up">
@@ -56,12 +60,11 @@
 		</div>
 	</div>
 	<div class="botBox">
-		<span id="profile-description">{{ profile.description }}</span>
-		<h4>Interest: </h4>
-		<p>Javascript, food</p>
+		<h4>Description:</h4>
+		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
-			<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a>
+			<p><a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a></p>
 		{% endfor %}
 	</div>
 </div>
@@ -81,15 +84,16 @@
       </div>
       <form action="{{ form_action }}" method="POST" enctype="multipart/form-data">
 		<div class="modal-body">
-		  <div class="form-group">
+		  <div>
 		    <label for="image-input" class="col-sm-2">Image:</label>
 		    <div class="col-sm-10">
-		    {% if profile %}
+		    {% if profile.picture %}
 		      <input type="hidden" name="original_blob_key" value="{{ profile.picture }}">
 		      <img id="img-modal-value" src="/pics/{{ profile.picture }}" alt="image" height="240" border="1"><br><br>
-		      <input id="img-input" type="file" name="image">
 		    {% endif %}
+		      <input id="img-input" type="file" name="image">
 		  	</div>
+		  	<br><br>
 		  </div>
 		  <div class="form-group">
 		    <label for="name-input" class="col-sm-2">Name:</label>
