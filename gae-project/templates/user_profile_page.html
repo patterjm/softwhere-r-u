@@ -81,21 +81,13 @@
 		</div>
 	</div>
 	<div class="botBox">
-		<span id="profile-description">{{ profile.description }}</span>
-		<h4>Interest:</h4>
-		<p>Javascript, food</p>
-		<h4>Featured Projects:</h4>
-		{% for project in projects %} <a
-			href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
-			project.title }}</a> {% endfor %}
+
 		<h4>Description:</h4>
 		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
 		<p>
-			<a
-				href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
-				project.title }}</a>
+			<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{project.title}}</a>
 		</p>
 		{% endfor %}
 	</div>
@@ -196,12 +188,10 @@
 								{% if profile.picture %} <input type="hidden"
 									name="original_blob_key" value="{{ profile.picture }}">
 								<img id="img-modal-value" src="/pics/{{ profile.picture }}"
-									alt="image" height="240" border="1"><br>
-								<br> {% endif %} <input id="img-input" type="file"
-									name="image">
+									alt="image" height="240" border="1"><br> <br>
+								{% endif %} <input id="img-input" type="file" name="image">
 							</div>
-							<br>
-							<br>
+							<br> <br>
 						</div>
 						<div class="form-group">
 							<label for="name-input" class="col-sm-2">Name:</label>
