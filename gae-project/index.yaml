@@ -19,3 +19,8 @@ indexes:
   ancestor: yes
   properties:
   - name: date_created
+
+- kind: User
+  properties:
+  - name: __key__
+  - name: friends

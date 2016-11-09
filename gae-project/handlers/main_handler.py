@@ -56,11 +56,33 @@ class AddProfileHandler(base_handlers.BasePage):
 class ManageFriendsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_friend_page.html"
-
+   
 class AddFriendsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/add_friend_page.html"
-    
+    def update_values(self, email, account_info, values):
+        profile_query = utils.get_query_for_all_user_profiles(email)
+        self_profile = utils.get_self_profile(email).get()
+        values["profile_query"] = profile_query
+        values["user_key"] = account_info.key.urlsafe()
+        values["user_name"] = self_profile.name
+        
+class CheckNotiHandler(base_handlers.BasePage):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        receiver = ndb.Key(urlsafe=self.request.get("receiver"))
+        receiver_user = receiver.get().key.parent()
+        noti_query = Notification.query(ndb.AND(Notification.key!=receiver_user, Notification.type == Notification.NotificationTypes.FRIEND))
+        noti_number = noti_query.count()
+        logging.info(noti_number)
+        if noti_number == 0:
+            response = {"hasnoti":False}
+            
+        else:
+            noti = noti_query.get().key.urlsafe()
+            response = {"hasnoti":True, "data":noti}
+        self.response.out.write(json.dumps(response))
+        
 class ExploreProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/explore_new_projects_page.html"
@@ -136,6 +158,15 @@ class UserProfileHandler(base_handlers.BasePage):
         values["form_action"] = blobstore.create_upload_url('/insert-profile')
 
     
+class CancelRequestHandler(base_handlers.BaseHandler):
+    def post(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        notification_key = ndb.Key(urlsafe=self.request.get("key"))
+        notification = notification_key.get()
+        notification.key.delete()
+        response = {}
+        self.response.out.write(json.dumps(response))
+
 
 class LoginHandler(base_handlers.BaseHandler):
     """Custom page to handle multiple methods of user authentication"""

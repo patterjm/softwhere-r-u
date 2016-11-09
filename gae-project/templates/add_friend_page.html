@@ -10,67 +10,27 @@
 				class="glyphicon glyphicon-search form-control-feedback"></span>
 		</div>
 	</form>
-	<!-- Considering split the projectBox div to more different divs, probably doing this in the future-->
+	<input type="hidden" value = {{user_key}} id="user_key">
+	<input type="hidden" value = {{user_name}} id="user_name">
+
+	{% for profile in profile_query%}
 	<div class="projectBox userBox">
 		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>George</p>
+			<img src="pics/{{profile.picture}}" class="projectPic" />
+			<p>{{profile.name}}</p>
 		</div>
 		<div class="rightBox">
 			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">Add
-					Friend</button>
+				<button type="button"
+					class="btn btn-primary projectButton addfriend">Add Friend</button>
+				<input type="hidden" value="{{profile.key.urlsafe()}}">
+				<input type="hidden" value="">
+				
 			</div>
 		</div>
 	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Jake</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">Add
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Jim</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">Add
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Mitch</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">Add
-					Friend</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox userBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Max</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">Add
-					Friend</button>
-			</div>
-		</div>
-	</div>
+	{% endfor %}
+
 
 </div>
 

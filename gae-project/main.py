@@ -42,8 +42,8 @@ app = webapp2.WSGIApplication([
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
     
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
-    
-    
+    ('/cancel-friendrequest' ,main_handler.CancelRequestHandler), 
+    ('/check-notification', main_handler.CheckNotiHandler),
     ('/pics/([^/]+)?', blob_handler.BlobServer),
     
 ], config=config, debug=True)

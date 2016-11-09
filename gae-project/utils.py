@@ -9,10 +9,22 @@ def get_parent_key_for_email(email):
     """ Gets the parent key (the key that is the parent to all Datastore data for this user) from the user's email. """
     return ndb.Key("Entity", email.lower())
 
-def get_query_for_all_user_profiles():
-    return Profile.query().order(Profile.name)
+def get_query_for_all_user_profiles(email):
+    email_profile = get_profile_for_email(email)
+    email_key = email_profile.key
+    logging.info(email_key.urlsafe())
+    user_key = email_key.parent()
+    user = user_key.get()
+    friends = user.friends
+    qry =  Profile.query(Profile.key != email_key)
+    for friend in friends:
+        qry = qry.filter(ndb.AND(friend.key!=Profile.key))
+    return qry
 
- 
+def get_self_profile(email):
+    email_key = get_profile_for_email(email).key
+    return Profile.query(Profile.key == email_key)
+
 def get_account_info_for_email(email, create_if_none=False):
     """ Gets the one and only AccountInfo object for this email. Returns None if User object doesn't exist. """
     email = email.lower()  # Just in case.

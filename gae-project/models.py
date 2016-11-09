@@ -31,7 +31,12 @@ class Notification(ndb.Model):
     message = ndb.TextProperty()
     time_stamp = ndb.DateTimeProperty(auto_now=True)
     has_been_viewed = ndb.BooleanProperty(default=False)
-
+    
+    class NotificationTypes(Enum):
+        FRIEND = 0
+        COLLABORATE = 1
+    
+    type = msgprop.EnumProperty(NotificationTypes, default=NotificationTypes.FRIEND)
 
 class Project(ndb.Model):
     """ Project object. Users can have and manage these """
