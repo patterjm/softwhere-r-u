@@ -20,7 +20,7 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
             notification = notification_key.get()
         else:
             receiver = ndb.Key(urlsafe=self.request.get("receiver_entity_key"))
-            receiver_user = receiver.get().key.parent()
+            receiver_user = receiver.parent()
             logging.info(receiver_user)
             notification = Notification(parent=receiver_user)
         
@@ -32,6 +32,23 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
             notification.message = profile.name + " would like to be your friend."
         notification.put()
         self.redirect(self.request.referer)
+        
+class InsertNotificationActionAjax(base_handlers.BaseAction):
+    def post(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        logging.info(self.request.get("receiver"))
+        receiver = ndb.Key(urlsafe=self.request.get("receiver"))
+        logging.info(receiver)
+        receiver_user = receiver.parent()
+        logging.info(receiver_user)
+        notification = Notification(parent=receiver_user)
+        
+        notification.receiver = receiver_user
+        notification.sender = ndb.Key(urlsafe=self.request.get("sender"))
+        notification.message = self.request.get("message")
+        notification.put()
+        response = notification.key.urlsafe()
+        self.response.out.write(json.dumps(response))
         
 class InsertManyNotifications(base_handlers.BaseAction):
     def handle_post(self, email, account_info):

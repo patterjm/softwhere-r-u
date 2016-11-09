@@ -110,7 +110,7 @@ softwareRU.addfriend = function(receiver, sender, message, item) {
 		"sender" : sender,
 		"message" : message
 	}
-	$.post("/insert-notification", dataToSend).done(function(data) {
+	$.post("/insert-notification-ajax", dataToSend).done(function(data) {
 		$(item).text("Cancel Request");
 		$(item).removeClass("btn-primary");
 		$(item).addClass("btn-secondary");

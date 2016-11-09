@@ -43,6 +43,7 @@ app = webapp2.WSGIApplication([
     ('/insert-project-text', insert_project_handlers.UpdateProjectText),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
+    ('/insert-notification-ajax', insert_notification_handlers.InsertNotificationActionAjax),
     ('/insert-many-notifications', insert_notification_handlers.InsertManyNotifications),
     ('/update-project-status', insert_project_handlers.UpdateProjectStatus),
     ('/update-project-administrators', insert_project_handlers.UpdateProjectAdministrators),
