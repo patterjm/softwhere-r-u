@@ -28,10 +28,11 @@ class Notification(ndb.Model):
     """ Another example model object. """
     sender = ndb.KeyProperty(kind='User')
     receiver = ndb.KeyProperty(kind='User')
+    project_key = ndb.KeyProperty(kind='Project')
     message = ndb.TextProperty()
     time_stamp = ndb.DateTimeProperty(auto_now=True)
     has_been_viewed = ndb.BooleanProperty(default=False)
-    
+
     class NotificationTypes(Enum):
         FRIEND = 0
         COLLABORATE = 1

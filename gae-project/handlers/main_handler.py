@@ -27,11 +27,7 @@ class MainHandler(base_handlers.BasePage):
     
     def update_values(self, email, account_info, values):
         # Subclasses should override this method to add additional data for the Jinja template.
-        project_query = utils.get_query_for_all_projects_for_email(email)
-        logging.info(project_query)
-        for project in project_query:
-            logging.info(project)
-        values["project_query"] = project_query
+        values["project_query"] = account_info.projects
         
 class ManageProjectsHandler(base_handlers.BasePage):
     def get_template(self):
@@ -39,11 +35,7 @@ class ManageProjectsHandler(base_handlers.BasePage):
     
     def update_values(self, email, account_info, values):
         # Subclasses should override this method to add additional data for the Jinja template.
-        project_query = utils.get_query_for_all_projects_for_email(email)
-        logging.info(project_query)
-        for project in project_query:
-            logging.info(project)
-        values["project_query"] = project_query
+        values["project_query"] = account_info.projects
 
 class AddProjectHandler(base_handlers.BasePage):
     def get_template(self):
@@ -94,6 +86,56 @@ class ManageCollaboratorsHandler(base_handlers.BasePage):
 class ProjectDetailHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/project_detail_page.html"
+    
+    def update_values(self, email, account_info, values):
+        #preload null values to prevent Jinja UndefinedError
+        values["project"] = None
+        values["is_administrator"] = False
+        values["is_collaborator"] = False
+        values["is_active"] = False
+        values["active_collaboration_request"] = False
+        values["is_sender"] = False
+        values["is_receiver"] = False
+        
+        if self.request.get('project_entity_key'):
+            project_entity_key_str = self.request.get('project_entity_key')
+            project_key = ndb.Key(urlsafe=project_entity_key_str)
+            project = project_key.get()
+            
+            values["project"] = project
+            
+            if project.status == project.ProjectStatus.ACTIVE:
+                values["is_active"] = True
+            #build user list to be rendered in Collaborators section
+            profile_list = []
+            
+            for user_key in project.users:
+                profile = Profile.query(ancestor=user_key).fetch(1)
+                profile_list.append(profile[0])
+            values["profiles"] = profile_list
+            
+            #check if accessing user is a project administrator
+            if account_info.key in project.administrators:
+                values["is_administrator"] = True
+                
+            #check if user is a collaborator
+            if account_info.key in project.users:
+                values["is_collaborator"] = True
+            else:
+                #check if accessing user received a friend request from profile owner
+                notification_receiver_query = Notification.query(Notification.receiver == account_info.key, Notification.project_key == project_key)
+                for notification in notification_receiver_query:
+                    values["active_collaboration_request"] = True
+                    values["is_receiver"] = True
+                    values["is_sender"] = False
+                    
+                #check if accessing user sent a friend request to profile owner
+                notification_receiver_query = Notification.query(Notification.sender == account_info.key, Notification.project_key == project_key)
+                for notification in notification_receiver_query:
+                    values["active_collaboration_request"] = True
+                    values["is_receiver"] = False
+                    values["is_sender"] = True
+
         
 class UserProfileHandler(base_handlers.BasePage):
     def get_template(self):
@@ -139,8 +181,6 @@ class UserProfileHandler(base_handlers.BasePage):
                     notification_receiver_query = Notification.query(Notification.receiver == user.key,
                                        Notification.sender == profile_key.parent())
                     for notification in notification_receiver_query:
-                        logging.info("??? GOT RESPONSE FROM NOTIFICATION QUERY")
-                        logging.info(notification)
                         values["pending_friend_request"] = True
                         values["is_receiver"] = True
                         values["is_sender"] = False
@@ -149,8 +189,6 @@ class UserProfileHandler(base_handlers.BasePage):
                     notification_sender_query = Notification.query(Notification.sender == user.key,
                                        Notification.receiver == profile_key.parent())
                     for notification in notification_sender_query:
-                        logging.info("??? GOT RESPONSE FROM NOTIFICATION QUERY")
-                        logging.info(notification)
                         values["pending_friend_request"] = True
                         values["is_receiver"] = False
                         values["is_sender"] = True

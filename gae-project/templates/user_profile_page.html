@@ -19,12 +19,39 @@
 				<button type="button" id="edit-profile" class="btn btn-primary">Edit your profile</button>
 			</a>
 			{% else %}
+			{% if pending_friend_request == False and is_friend == False %}
 			<form action="/insert-notification" method="POST">
-				<input name="sender" type="hidden" value="{{ account_info.key.urlsafe() }}">
-				<input name="receiver" type="hidden" value="{{ profile.key.urlsafe() }}">
+				<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
+				<input name="receiver_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
 				<input name="type" type="hidden" value="collaborator">
 				<button type="submit" class="btn btn-primary">Add friend</button>
 			</form>
+			{% endif %}
+			{% if is_friend == True %}
+			<form action="/delete-friend" method="POST">
+				<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
+				<input name="former-friend" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" class="btn btn-primary">Remove friend</button>
+			</form>
+			{% endif %}
+			{% if pending_friend_request == True %}
+				<span>Friend Request pending</span>
+				{% if is_sender == True %}
+				<form action="/delete-notification" method="POST">
+					<input name="sender_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
+					<input name="receiver_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">
+					<button type="submit" class="btn btn-primary">Cancel request</button>
+				</form>
+				{% endif %}
+				{% if is_receiver == True %}
+				<form action="/delete-notification" method="POST">
+					<input name="receiver_entity_key" type="hidden" value="{{ account_info.key.urlsafe() }}">
+					<input name="sender_entity_key" type="hidden" value="{{ profile.key.parent().urlsafe() }}">										
+					<button type="submit" name="type-accept" value="accept">Accept friend request</button>
+					<button type="submit" name="type-reject" value="reject">Reject friend request</button>
+				</form>
+				{% endif %}
+			{% endif %}
 			{% endif %}
 		</div>
 	</div>
@@ -33,7 +60,9 @@
 		<h4>Interest: </h4>
 		<p>Javascript, food</p>
 		<h4>Featured Projects:</h4>
-		<a href="#">SoftwareRU</a>
+		{% for project in projects %}
+			<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a>
+		{% endfor %}
 	</div>
 </div>
 {% else %}
