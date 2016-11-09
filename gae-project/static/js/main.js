@@ -11,9 +11,30 @@ softwareRU.enableButtons = function() {
 
 	$('.table > tbody > tr').click(function() {
 		var projectKeyString = $(this).children("td:nth-child(3)").text();
+		
+		window.location.replace("./project-detail?project_entity_key="+projectKeyString);
+	});
+	
+	$('.projectDetail').click(function() {
+		var projectKeyString = $(this).next().next("input").val();
+		console.log(projectKeyString);
 		window.location.replace("./project-detail?project_entity_key="+projectKeyString);
 	});
 
+	$('.requestJoin').click(function(){
+		var projectKeyString = $(this).next("input").val();
+		var receiver = $(this).next("input").val();
+		var sender = $("#user_key").val();
+		console.log(receiver);
+		console.log(sender);
+		var reponame = $(this).next("input").next("").val();
+		console.log(reponame);
+		var message = "User " + $("#user_name").val()
+				+ " wants to join your repo " + reponame;
+		console.log(message);
+		softwareRU.projectJoinRequest(receiver,sender,message);
+	});
+	
 	$('input[name=dob]').datepicker();
 
 	$('.addfriend').click(
@@ -21,8 +42,8 @@ softwareRU.enableButtons = function() {
 				if ($(this).text() === "Add Friend") {
 					var receiver = $(this).next("input").val();
 					var sender = $("#user_key").val();
-					var message = "User" + $("#user_name").val()
-							+ "wants to be your friend!";
+					var message = "User " + $("#user_name").val()
+							+ " wants to be your friend!";
 					softwareRU.addfriend(receiver, sender, message, this);
 				} else {
 					var key = $(this).next("input").next("").val();
@@ -69,6 +90,19 @@ softwareRU.enableSearch = function() {
 	});
 
 };
+
+softwareRU.projectJoinRequest = function(receiver, sender, message){
+	var dataToSend = {
+			"receiver" : receiver,
+			"sender" : sender,
+			"message" : message
+		}
+		$.post("/request-join", dataToSend).done(function(data) {
+			console.log("request success");
+		}).fail(function(jqxhr, textStatus, error) {
+			console.log("POST Request Failed: " + textStatus + ", " + error);
+		});
+}
 
 softwareRU.addfriend = function(receiver, sender, message, item) {
 	var dataToSend = {
