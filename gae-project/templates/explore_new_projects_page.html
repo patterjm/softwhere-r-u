@@ -3,78 +3,37 @@
 <hr>
 <div class="myContainer midContainer">
 	<!-- Considering split the projectBox div to more different divs, probably doing this in the future-->
-	<form action="" class="search-form" >
- 		<div class="form-group has-feedback">
- 			<label for="search" class="sr-only">Search</label> <input id="search" type="text"
- 				class="form-control" name="search" id="search" placeholder="search">
- 			<span class="glyphicon glyphicon-search form-control-feedback"></span>
- 		</div>
- 	</form>
+	<form action="" class="search-form">
+		<div class="form-group has-feedback">
+			<label for="search" class="sr-only">Search</label> <input id="search"
+				type="text" class="form-control" name="search" id="search"
+				placeholder="search"> <span
+				class="glyphicon glyphicon-search form-control-feedback"></span>
+		</div>
+	</form>
+	<input type="hidden" value={{user_key}} id="user_key"> <input
+		type="hidden" value={{user_name}} id="user_name"> {% for
+	project in projects %}
 	<div class="projectBox">
 		<div class="leftBox">
 			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Project Name</p>
+			<p>{{project.title}}</p>
 		</div>
 		<div class="rightBox">
 			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">View Details
-					</button>
-				<button type="button" class="btn btn-primary projectButton">Request to Join</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Project Name</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">View Details
-					</button>
-				<button type="button" class="btn btn-primary projectButton">Requeset to Join</button>
-			</div>		</div>
-	</div>
-	<div class="projectBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Project Name</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">View Details
-					</button>
-				<button type="button" class="btn btn-primary projectButton">Request to Join</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Project Name</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">View Details
-					</button>
-				<button type="button" class="btn btn-primary projectButton">Request to Join</button>
-			</div>
-		</div>
-	</div>
-	<div class="projectBox">
-		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
-			<p>Project Name</p>
-		</div>
-		<div class="rightBox">
-			<div class="projectButtonBox">
-				<button type="button" class="btn btn-primary projectButton">View Details
-					</button>
-				<button type="button" class="btn btn-primary projectButton">Request to Join</button>
-			</div>
-		</div>
-	</div>
+				<button type="button"
+					class="btn btn-primary projectButton projectDetail">View
+					Details</button>
 
+				<button type="button"
+					class="btn btn-primary projectButton requestJoin">Request
+					to Join</button>
+				<input type="hidden" value={{project.key.urlsafe()}}> <input
+					type="hidden" value={{project.title}}>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
 </div>
 
 

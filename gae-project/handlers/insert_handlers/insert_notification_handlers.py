@@ -18,7 +18,9 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
         self.response.headers['Content-Type'] = 'application/json'
         logging.info(self.request.get("receiver"))
         receiver = ndb.Key(urlsafe=self.request.get("receiver"))
+        logging.info(receiver)
         receiver_user = receiver.get().key.parent()
+        logging.info(receiver_user)
         notification = Notification(parent=receiver_user)
         
         notification.receiver = receiver_user

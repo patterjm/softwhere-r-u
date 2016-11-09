@@ -36,6 +36,7 @@ class Notification(ndb.Model):
     class NotificationTypes(Enum):
         FRIEND = 0
         COLLABORATE = 1
+        REQUESTJOIN = 2
     
     type = msgprop.EnumProperty(NotificationTypes, default=NotificationTypes.FRIEND)
 

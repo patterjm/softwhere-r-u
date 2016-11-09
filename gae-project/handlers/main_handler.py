@@ -17,7 +17,7 @@ from github import Github
 from github.GithubException import BadCredentialsException
 from handlers import base_handlers
 import main
-from models import Profile, Notification
+from models import Profile, Notification, Project
 import utils
 
 
@@ -78,7 +78,14 @@ class CheckNotiHandler(base_handlers.BasePage):
 class ExploreProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/explore_new_projects_page.html"
-    
+    def update_values(self, email, account_info, values):
+        values["projects"] = utils.get_query_for_all_projects(email)
+        logging.info(values["projects"])
+        self_profile = utils.get_self_profile(email).get()
+        values["user_key"] = account_info.key.urlsafe()
+        values["user_name"] = self_profile.name
+        
+        
 class ManageCollaboratorsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/manage_collaborators_page.html"
@@ -205,7 +212,22 @@ class CancelRequestHandler(base_handlers.BaseHandler):
         response = {}
         self.response.out.write(json.dumps(response))
 
-
+class RequestJoinHandler(base_handlers.BaseHandler):
+    def post(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        receiver = ndb.Key(urlsafe=self.request.get("receiver"))
+        logging.info(receiver)
+        
+        receiver_user_list = Project.query(Project.key == receiver).get().administrators
+        for receiver_user in receiver_user_list:
+            notification = Notification(parent=receiver_user)
+            notification.type = notification.NotificationTypes.REQUESTJOIN
+            notification.message = self.request.get("message")
+            notification.sender = ndb.Key(urlsafe=self.request.get("sender"))
+            notification.receiver = receiver_user
+            notification.put()
+        response = {}
+        self.response.out.write(json.dumps(response))
 class LoginHandler(base_handlers.BaseHandler):
     """Custom page to handle multiple methods of user authentication"""
     def get(self):

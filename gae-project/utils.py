@@ -54,6 +54,14 @@ def get_query_for_all_projects_for_email(email):
     parent_key = get_parent_key_for_email(email)
     return Project.query(ancestor=parent_key).order(Project.date_created)
 
+def get_query_for_all_projects(email):
+    qry = get_query_for_all_projects_for_email(email)
+    allproject = Project.query()
+    for project in qry:
+        allproject = allproject.filter(ndb.AND(project.key!=Project.key))
+    logging.info(allproject)
+    return allproject
+
 def get_profile_for_email(email):
     parent_key = get_user_for_email(email).key
     return Profile.get_by_id(email, parent=parent_key)
