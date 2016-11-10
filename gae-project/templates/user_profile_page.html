@@ -6,10 +6,12 @@
 	<div class="topBox">
 		<div class="leftBox up">
 			<div id="current-img">
-				<input type="hidden" name="original_blob_key"
-					value={{profile.picture}}> <img
-					src="/pics/{{profile.picture}}" alt="image" height="240" border="1"
-					class="projectPic">
+				<input type="hidden" name="original_blob_key"	value={{profile.picture}}> 
+				{% if profile.picture %} 
+				<img src="/pics/{{ profile.picture }}" class="projectPic" /> 
+				{% else %}
+				<img src="/static/pics/no-image.png" class="projectPic" /> 
+				{% endif %}
 				<div class="botdiv">
 					<a id="modify-profile-link" href="#" data-toggle="modal"
 						data-target="#insert-profile-modal">
@@ -17,11 +19,7 @@
 							your profile</button>
 					</a>
 				</div>
-				<br> <br> <input type="hidden" name="original_blob_key"
-					value={{profile.picture}}> {% if profile.picture %} <img
-					src="/pics/{{ profile.picture }}" class="projectPic" /> {% else %}
-				<img src="/static/pics/no-image.png" class="projectPic" /> {% endif
-				%}
+				<br> <br> 
 			</div>
 		</div>
 		<div class="rightBox up">
@@ -81,22 +79,12 @@
 		</div>
 	</div>
 	<div class="botBox">
-		<span id="profile-description">{{ profile.description }}</span>
-		<h4>Interest:</h4>
-		<p>Javascript, food</p>
-		<h4>Featured Projects:</h4>
-		{% for project in projects %} <a
-			href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
-			project.title }}</a> {% endfor %}
 		<h4>Description:</h4>
+		{% if profile.description %}
 		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
-		<p>
-			<a
-				href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
-				project.title }}</a>
-		</p>
+		<p><a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a></p>
 		{% endfor %}
 	</div>
 </div>
