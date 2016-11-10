@@ -76,7 +76,11 @@ class CheckNotiHandler(base_handlers.BasePage):
         self.response.headers['Content-Type'] = 'application/json'
         receiver = ndb.Key(urlsafe=self.request.get("receiver"))
         receiver_user = receiver.get().key.parent()
-        noti_query = Notification.query(ndb.AND(Notification.key!=receiver_user, Notification.type == Notification.NotificationTypes.FRIEND))
+        logging.info(receiver_user)
+        sender = ndb.Key(urlsafe=self.request.get("sender"))
+        logging.info(Notification.query())
+        noti_query = Notification.query(ndb.AND(ndb.AND(Notification.receiver ==receiver_user, Notification.type == Notification.NotificationTypes.FRIEND), Notification.sender == sender))
+        logging.info(noti_query.get())
         noti_number = noti_query.count()
         logging.info(noti_number)
         if noti_number == 0:
