@@ -80,21 +80,15 @@
 		</div>
 	</div>
 	<div class="botBox">
-<<<<<<< HEAD
-=======
 
->>>>>>> 80a73ad60330378bb59c296b0a26d6de71e71b3b
 		<h4>Description:</h4>
 		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
-<<<<<<< HEAD
 		<p><a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a></p>
-=======
 		<p>
 			<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{project.title}}</a>
 		</p>
->>>>>>> 80a73ad60330378bb59c296b0a26d6de71e71b3b
 		{% endfor %}
 	</div>
 </div>
