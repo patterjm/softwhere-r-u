@@ -1,26 +1,68 @@
 {% extends "templates/base_page.html" %} {% block content %}
 <h2>User Profile</h2>
 <hr>
+{% if no_profile %}
+<div class="alert alert-warning" >
+  <strong>Sorry!</strong> You need to have a profile first
+</div>
+{% endif %}
 {% if profile %}
 <div class="myContainer UPContainer">
 	<div class="topBox">
 		<div class="leftBox up">
 			<div id="current-img">
-				<input type="hidden" name="original_blob_key"	value={{profile.picture}}> 
-				{% if profile.picture %} 
-				<img src="/pics/{{ profile.picture }}" class="projectPic" /> 
-				{% else %}
-				<img src="/static/pics/no-image.png" class="projectPic" /> 
-				{% endif %}
-
+				<input type="hidden" name="original_blob_key"
+					value={{profile.picture}}> {% if profile.picture %} <img
+					src="/pics/{{ profile.picture }}" class="projectPic" /> {% else %}
+				<img src="/static/pics/no-image.png" class="projectPic" /> {% endif
+				%}
+				
 				<div class="botdiv">
-					<a id="modify-profile-link" href="#" data-toggle="modal"
-						data-target="#insert-profile-modal">
-						<button type="button" id="edit-profile" class="btn btn-primary">Edit
-							your profile</button>
-					</a>
+					{% if is_owner == True %} <a id="modify-profile-link" href="#"
+				data-toggle="modal" data-target="#insert-profile-modal">
+				<button type="button" id="edit-profile" class="btn btn-primary">Edit
+					your profile</button>
+			</a> {% else %} {% if pending_friend_request == False and is_friend ==
+			False %}
+			<form action="/insert-notification" method="POST">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="receiver_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}"> <input
+					name="type" type="hidden" value="collaborator">
+				<button type="submit" class="btn btn-primary">Add friend</button>
+			</form>
+			{% endif %} {% if is_friend == True %}
+			<form action="/delete-friend" method="POST">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="former-friend" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" class="btn btn-primary">Remove friend</button>
+			</form>
+			{% endif %} {% if pending_friend_request == True %} <span>Friend
+				Request pending</span> {% if is_sender == True %}
+			<form action="/delete-notification" method="POST">
+				<input name="sender_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="receiver_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" class="btn btn-primary">Cancel
+					request</button>
+			</form>
+			{% endif %} {% if is_receiver == True %}
+			<form action="/delete-notification" method="POST">
+				<input name="receiver_entity_key" type="hidden"
+					value="{{ account_info.key.urlsafe() }}"> <input
+					name="sender_entity_key" type="hidden"
+					value="{{ profile.key.parent().urlsafe() }}">
+				<button type="submit" name="type-accept" value="accept">Accept
+					friend request</button>
+				<button type="submit" name="type-reject" value="reject">Reject
+					friend request</button>
+			</form>
+			{% endif %} {% endif %} {% endif %}
 				</div>
-				<br> <br> 
 			</div>
 		</div>
 		<div class="rightBox up">
@@ -84,6 +126,7 @@
 		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
+
 		<p><a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a></p>
 
 		{% endfor %}
@@ -127,7 +170,8 @@
 						<label for="name-input" class="col-sm-2">Name:</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control"
-								placeholder="Profile name" name="name" {% if profile %} value="{{ profile.name }}"{% endif %}>
+								placeholder="Profile name" name="name" {% if
+								profile %} value="{{ profile.name }}"{% endif %}>
 						</div>
 					</div>
 					<div class="form-group col-sm-12">
@@ -166,4 +210,4 @@
 	</div>
 </div>
 
-	{% endblock %}
+{% endblock %}

@@ -40,7 +40,11 @@ class ManageProjectsHandler(base_handlers.BasePage):
 class AddProjectHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/add_project_page.html"
-    
+    def update_values(self, email, account_info, values):
+        user_key = account_info.key
+        profile = Profile.query(ancestor = user_key)
+        if profile.count() == 0:
+            self.redirect('/user-profile?no-profile=True')
 class AddProfileHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/temp_add_profile_page.html"
@@ -50,26 +54,37 @@ class ManageFriendsHandler(base_handlers.BasePage):
         return "templates/manage_friend_page.html"
     
     def update_values(self, email, account_info, values):
-        user = account_info
-        friends_list = []
-        profile_list = []
-        for friend_key in user.friends:
-            friend = friend_key.get()
-            profile = utils.get_profile_for_email(friend_key.id())
-            friends_list.append(friend)
-            profile_list.append(profile)
-        values["friends_list"] = friends_list
-        values["profile_list"] = profile_list
+        user_key = account_info.key
+        profile = Profile.query(ancestor = user_key)
+        logging.info(profile.count())
+        if profile.count() == 0:
+            self.redirect('/user-profile?no-profile=True')
+        else:
+            user = account_info
+            friends_list = []
+            profile_list = []
+            for friend_key in user.friends:
+                friend = friend_key.get()
+                profile = utils.get_profile_for_email(friend_key.id())
+                friends_list.append(friend)
+                profile_list.append(profile)
+            values["friends_list"] = friends_list
+            values["profile_list"] = profile_list
    
 class AddFriendsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/add_friend_page.html"
     def update_values(self, email, account_info, values):
-        profile_query = utils.get_query_for_all_user_profiles(email)
-        self_profile = utils.get_self_profile(email).get()
-        values["profile_query"] = profile_query
-        values["user_key"] = account_info.key.urlsafe()
-        values["user_name"] = self_profile.name
+        user_key = account_info.key
+        profile = Profile.query(ancestor = user_key)
+        if profile.count() == 0:
+            self.redirect('/user-profile?no-profile=True')
+        else:
+            profile_query = utils.get_query_for_all_user_profiles(email)
+            self_profile = utils.get_self_profile(email).get()
+            values["profile_query"] = profile_query
+            values["user_key"] = account_info.key.urlsafe()
+            values["user_name"] = self_profile.name
         
 class CheckNotiHandler(base_handlers.BasePage):
     def get(self):
@@ -95,11 +110,16 @@ class ExploreProjectsHandler(base_handlers.BasePage):
     def get_template(self):
         return "templates/explore_new_projects_page.html"
     def update_values(self, email, account_info, values):
-        values["projects"] = utils.get_query_for_all_projects(email)
-        logging.info(values["projects"])
-        self_profile = utils.get_self_profile(email).get()
-        values["user_key"] = account_info.key.urlsafe()
-        values["user_name"] = self_profile.name
+        user_key = account_info.key
+        profile = Profile.query(ancestor = user_key)
+        if profile.count() == 0:
+            self.redirect('/user-profile?no-profile=True')
+        else:
+            values["projects"] = utils.get_query_for_all_projects(email)
+            logging.info(values["projects"])
+            self_profile = utils.get_self_profile(email).get()
+            values["user_key"] = account_info.key.urlsafe()
+            values["user_name"] = self_profile.name
         
         
 class ManageCollaboratorsHandler(base_handlers.BasePage):
@@ -173,6 +193,8 @@ class UserProfileHandler(base_handlers.BasePage):
         values["pending_friend_request"] = False
         values["is_receiver"] = False
         values["is_sender"] = False
+        if self.request.get('no-profile'):
+            values["no_profile"] = True
         
         if self.request.get('profile_entity_key'):
             profile_entity_key_str = self.request.get('profile_entity_key')

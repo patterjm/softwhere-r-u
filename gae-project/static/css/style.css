@@ -233,7 +233,6 @@ Popup Arrow
 
 .botBox h4, .botBox p, .botBox a {
 	position: relative;
-	left: 8%;
 }
 
 th {
@@ -345,7 +344,15 @@ li a {
 	.botdiv{
 		display:block;
 	} 
+	
+	#notificationContainer{
+		z-index:1111 !important;
+		width: 60vw;
+	}
 	/*  */
 }
+
+.datepicker{z-index:1151 !important;}
+
 
 

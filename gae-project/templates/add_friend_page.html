@@ -10,18 +10,30 @@
 				class="glyphicon glyphicon-search form-control-feedback"></span>
 		</div>
 	</form>
-	<input type="hidden" value="{{ user_key }}" id="user_key">
-	<input type="hidden" value="{{ user_name }}" id="user_name">
+	<input type="hidden" value = {{user_key}} id="user_key">
+	<input type="hidden" value = {{user_name}} id="user_name">
+	
+
 
 	{% for profile in profile_query%}
 	<div class="projectBox">
 		<div class="leftBox">
+			<a href="./user-profile?profile_entity_key={{ profile.key.urlsafe() }}">
+		
 			{% if profile.picture %}
 			<img src="/pics/{{ profile.picture }}" class="projectPic" />
 			{% else %}
 			<img src="/static/pics/no-image.png" class="projectPic" />
 			{% endif %}
+			</a>
 			<p>{{profile.name}}</p>
+			<div class="botdiv">
+			<button type="button"
+					class="btn btn-primary addfriend">Add Friend</button>
+				<input type="hidden" value="{{profile.key.urlsafe()}}">
+				<input type="hidden" value="">
+			</div>
+			
 		</div>
 		<div class="rightBox">
 			<div class="projectButtonBox">
