@@ -5,7 +5,7 @@ softwareRU.enableButtons = function() {
 
 	});
 
-	$('.table > tbody > tr').hover(function() {
+	$('.table > tbody > tr').click(function() {
 		$(this).css('cursor', 'pointer');
 	});
 
@@ -17,7 +17,6 @@ softwareRU.enableButtons = function() {
 	
 	$('.projectDetail').click(function() {
 		var projectKeyString = $(this).next().next("input").val();
-		console.log(projectKeyString);
 		window.location.replace("./project-detail?project_entity_key="+projectKeyString);
 	});
 
@@ -25,13 +24,9 @@ softwareRU.enableButtons = function() {
 		var projectKeyString = $(this).next("input").val();
 		var receiver = $(this).next("input").val();
 		var sender = $("#user_key").val();
-		console.log(receiver);
-		console.log(sender);
 		var reponame = $(this).next("input").next("").val();
-		console.log(reponame);
 		var message = "User " + $("#user_name").val()
 				+ " wants to join your repo " + reponame;
-		console.log(message);
 		softwareRU.projectJoinRequest(receiver,sender,message);
 	});
 	
@@ -98,7 +93,6 @@ softwareRU.projectJoinRequest = function(receiver, sender, message){
 			"message" : message
 		}
 		$.post("/request-join", dataToSend).done(function(data) {
-			console.log("request success");
 		}).fail(function(jqxhr, textStatus, error) {
 			console.log("POST Request Failed: " + textStatus + ", " + error);
 		});
@@ -130,7 +124,6 @@ softwareRU.cancelRequest = function(key, item) {
 		$(item).removeClass("btn-secondary");
 		$(item).addClass("btn-primary");
 		$(item).next("input").next("").val("");
-		console.log("canceled");
 
 	}).fail(function(jqxhr, textStatus, error) {
 		console.log("POST Request Failed: " + textStatus + ", " + error);
@@ -141,7 +134,6 @@ softwareRU.updateViews = function() {
 	$(".addfriend").each(function(){
 		var receiver = $(this).next("input").val();
 		var sender = $("#user_key").val();
-		console.log(receiver);
 		softwareRU.checkNotification(receiver, sender, this)
 	});
 };
@@ -158,7 +150,6 @@ softwareRU.checkNotification = function(receiver, sender, item) {
 			$(item).removeClass("btn-secondary");
 			$(item).addClass("btn-primary");
 		} else {
-			console.log(123);
 			$(item).text("Cancel Request");
 			$(item).removeClass("btn-primary");
 			$(item).addClass("btn-secondary");

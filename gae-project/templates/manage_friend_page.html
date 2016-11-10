@@ -13,13 +13,15 @@
 	<!-- Considering split the projectBox div to more different divs, probably doing this in the future-->
 	{% for profile in profile_list %}
 	<div class="projectBox userBox">
-		<a href="./user-profile?profile_entity_key={{ profile.key.urlsafe() }}">
 		<div class="leftBox">
+			<a href="./user-profile?profile_entity_key={{ profile.key.urlsafe() }}">
+		
 			{% if profile.picture %}
 			<img src="/pics/{{ profile.picture }}" class="projectPic" />
 			{% else %}
 			<img src="/static/pics/no-image.png" class="projectPic" />
 			{% endif %}
+			</a>
 			<p>{{ profile.name }}</p>
 		</div>
 		</a>

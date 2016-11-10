@@ -73,7 +73,7 @@ class InsertNewProfileAction(blobstore_handlers.BlobstoreUploadHandler):
         profile.name = self.request.get("name")
         profile.location = self.request.get("location")
         profile.description = self.request.get("description")
-        profile.dob = datetime.strptime(self.request.get("dob"), "%Y-%m-%d")
+        profile.dob = datetime.strptime(self.request.get("dob"), "%m/%d/%Y")
         profile.put()
         url_redir_str = "./user-profile?profile_entity_key=" + profile_key
         logging.info(url_redir_str)

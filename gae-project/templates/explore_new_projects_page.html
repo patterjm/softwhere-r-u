@@ -15,9 +15,20 @@
 		type="hidden" value={{user_name}} id="user_name"> {% for
 	project in projects %}
 	<div class="projectBox">
+	
 		<div class="leftBox">
-			<img src="/static/pics/test.png" class="projectPic" />
+				<a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">
+			
+			<img src="/static/pics/test.png" class="projectPic" /> </a>
 			<p>{{project.title}}</p>
+			<div class="botdiv">
+
+				<button type="button"
+					class="btn btn-primary  requestJoin">Request
+					to Join</button>
+				<input type="hidden" value={{project.key.urlsafe()}}> <input
+					type="hidden" value={{project.title}}>
+			</div>
 		</div>
 		<div class="rightBox">
 			<div class="projectButtonBox">
