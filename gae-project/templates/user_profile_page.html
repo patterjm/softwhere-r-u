@@ -122,17 +122,13 @@
 		</div>
 	</div>
 	<div class="botBox">
-
 		<h4>Description:</h4>
 		<p id="profile-description">{{ profile.description }}</p>
 		<h4>Featured Projects:</h4>
 		{% for project in projects %}
-		<p>
-			<a
-				href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{
-				project.title }}</a>
-		</p>
-	
+
+		<p><a href="./project-detail?project_entity_key={{ project.key.urlsafe() }}">{{ project.title }}</a></p>
+
 		{% endfor %}
 	</div>
 </div>
