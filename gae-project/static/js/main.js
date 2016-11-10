@@ -141,6 +141,7 @@ softwareRU.updateViews = function() {
 	$(".addfriend").each(function(){
 		var receiver = $(this).next("input").val();
 		var sender = $("#user_key").val();
+		console.log(receiver);
 		softwareRU.checkNotification(receiver, sender, this)
 	});
 };
@@ -151,16 +152,17 @@ softwareRU.checkNotification = function(receiver, sender, item) {
 		"sender" : sender,
 	}
 	$.get("/check-notification", dataToSend).done(function(data) {
+		console.log($(item));
 		if (!data["hasnoti"]) {
 			$(item).text("Add Friend");
 			$(item).removeClass("btn-secondary");
 			$(item).addClass("btn-primary");
 		} else {
+			console.log(123);
 			$(item).text("Cancel Request");
 			$(item).removeClass("btn-primary");
 			$(item).addClass("btn-secondary");
 			$(item).next("input").next("").val(data["data"]);
-
 		}
 
 	}).fail(function(jqxhr, textStatus, error) {

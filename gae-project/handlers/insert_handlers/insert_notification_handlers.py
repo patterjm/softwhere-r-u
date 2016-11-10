@@ -36,13 +36,12 @@ class InsertNewNotificationAction(base_handlers.BaseAction):
 class InsertNotificationActionAjax(base_handlers.BaseAction):
     def post(self):
         self.response.headers['Content-Type'] = 'application/json'
-        logging.info(self.request.get("receiver"))
         receiver = ndb.Key(urlsafe=self.request.get("receiver"))
         logging.info(receiver)
         receiver_user = receiver.parent()
         logging.info(receiver_user)
         notification = Notification(parent=receiver_user)
-        
+        logging.info(123)
         notification.receiver = receiver_user
         notification.sender = ndb.Key(urlsafe=self.request.get("sender"))
         notification.message = self.request.get("message")
