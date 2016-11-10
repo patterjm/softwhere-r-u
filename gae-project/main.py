@@ -5,7 +5,7 @@ import webapp2
 
 from handlers import main_handler, blob_handler
 from handlers.delete_handlers import delete_notification_handlers, \
-    delete_user_handlers
+    delete_user_handlers, delete_project_handlers
 from handlers.insert_handlers import insert_project_handlers, insert_profile_handlers, \
     insert_notification_handlers
 
@@ -39,7 +39,7 @@ app = webapp2.WSGIApplication([
     ('/logout', main_handler.LogoutHandler),
     
     ('/insert-project', insert_project_handlers.InsertNewProjectAction),
-    ('/insert-project-text', insert_project_handlers.UpdateProjectText),
+    ('/update-project', insert_project_handlers.UpdateProjectAction),
     ('/insert-profile', insert_profile_handlers.InsertNewProfileAction),
     ('/insert-notification', insert_notification_handlers.InsertNewNotificationAction),
     ('/insert-notification-ajax', insert_notification_handlers.InsertNotificationActionAjax),
@@ -48,9 +48,11 @@ app = webapp2.WSGIApplication([
     ('/update-project-administrators', insert_project_handlers.UpdateProjectAdministrators),
     ('/update-project-users', insert_project_handlers.UpdateProjectUsers),
     ('/delete-friend', delete_user_handlers.DeleteFriendAction),
+    ('/delete-project-user', delete_project_handlers.DeleteUserFromProjectAction),
     ('/delete-notification', delete_notification_handlers.DeleteNotificationAction),
     ('/cancel-friendrequest' ,main_handler.CancelRequestHandler), 
     ('/check-notification', main_handler.CheckNotiHandler),
+    ('/get-users', main_handler.GetProfilesByNameHandler),
     ('/request-join', main_handler.RequestJoinHandler),
     ('/pics/([^/]+)?', blob_handler.BlobServer),
     

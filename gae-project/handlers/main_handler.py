@@ -119,7 +119,7 @@ class ProjectDetailHandler(base_handlers.BasePage):
         values["active_collaboration_request"] = False
         values["is_sender"] = False
         values["is_receiver"] = False
-        values["form_action"] = blobstore.create_upload_url('/insert-project-text')
+        values["form_action"] = blobstore.create_upload_url('/update-project')
         
         if self.request.get('project_entity_key'):
             project_entity_key_str = self.request.get('project_entity_key')
@@ -288,6 +288,19 @@ class LoginHandler(base_handlers.BaseHandler):
             }
         self.session['user_info'] = json.dumps(user_info)
         self.redirect('/')
+
+class GetProfilesByNameHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'application/json'
+        name_val = self.request.get("input_val")
+        profile_query = Profile.query(Profile.name >= name_val).fetch(10)
+        profile_list = []
+        for profile in profile_query:
+            if name_val in profile.name:
+                profile_list.append({"user_key": profile.key.parent().urlsafe(), "profile_name": profile.name})
+        response = {"query_results":profile_list}
+        self.response.out.write(json.dumps(response))        
+
 class LogoutHandler(base_handlers.BaseHandler):
     def get(self):
         del self.session["user_info"]

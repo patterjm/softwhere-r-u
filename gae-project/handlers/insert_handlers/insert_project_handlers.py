@@ -15,7 +15,7 @@ import webapp2
 from webapp2_extras import sessions
 
 from handlers import base_handlers
-from models import Project, Profile
+from models import Project, Profile, Notification
 import utils
 
 
@@ -117,7 +117,7 @@ class UpdateProjectStatus(base_handlers.BaseAction):
         
         self.redirect(self.request.referer)
         
-class UpdateProjectText(blobstore_handlers.BlobstoreUploadHandler):
+class UpdateProjectAction(blobstore_handlers.BlobstoreUploadHandler):
     def dispatch(self):
         # Get a session store for this request.
         self.session_store = sessions.get_store(request=self.request)
@@ -162,6 +162,13 @@ class UpdateProjectText(blobstore_handlers.BlobstoreUploadHandler):
         project.title = title
         project.description = description
         
+        admin_key_list = []
+        admin_list = self.request.get_all("admin_selected")   
+        for admin_str in admin_list:
+            admin_key = ndb.Key(urlsafe=admin_str)
+            admin_key_list.append(admin_key.parent())
+        project.administrators = admin_key_list
+        
         if self.get_uploads() and len(self.get_uploads()) == 1:
             logging.info("Received an image blob with this profile update.")
             media_blob = self.get_uploads()[0]
@@ -173,6 +180,33 @@ class UpdateProjectText(blobstore_handlers.BlobstoreUploadHandler):
                 logging.info("Attaching original blob key (this must have been an edit or duplicate)")
                 project.picture = BlobKey(original_blob_key)
         
+        potential_invitees = self.request.get_all("project_collaborator")
+        for potential_user in potential_invitees:
+            if potential_user and potential_user != utils.get_profile_for_email(email).name:
+                profile_query = Profile.query(Profile.name == potential_user)
+                for profile in profile_query:
+                    user_key = profile.key.parent()
+                user = user_key.get()
+                if user_key not in project.users:
+                    notification_count = Notification.query(Notification.project_key == project_key, 
+                                                            ndb.OR(Notification.sender == user_key, 
+                                                                   Notification.receiver == user_key)).count()
+                    if notification_count == 0:
+                        notification = Notification(parent=user_key)
+                        notification.sender = account_info.key
+                        notification.receiver = user_key
+                        notification.project_key = project_key
+                        notification.message = utils.get_profile_for_email(email).name + " would like you to join " + project.title
+                        notification.type = Notification.NotificationTypes.COLLABORATE
+                        notification.put()
+        
+        project_status_str = self.request.get("status")
+        if project_status_str == 'ACTIVE':   
+            project.status = Project.ProjectStatus.ACTIVE
+        elif project_status_str == 'ARCHIVED':
+            project.status = Project.ProjectStatus.ARCHIVED
+        elif project.status == 'COMPLETED':
+            project.status = Project.ProjectStatus.COMPLETED
         
         project.put()
         

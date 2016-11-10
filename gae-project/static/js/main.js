@@ -52,22 +52,41 @@ softwareRU.enableButtons = function() {
 			});
 
 	
-	$(".collaborator_input").keyup(function(){
-		if($(this).parent().nextAll(".collaborator_div").length == 0){
-			if($(this).next().length == 0){
-				$(this).after("<button class=\"btn-danger remove_collaborator pull-right\"><span class=\"glyphicon glyphicon-remove\"></span></button>");
-				$(".remove_collaborator").click(function(){
-					if($(".collaborator-form-div").children(".collaborator_div").length > 1){
-						$(this).parent().remove();
-					}else{
-						$(this).remove();
-					}
-				});
+	$(".collaborator_input").keyup(function(e){
+		var code = (e.keyCode || e.which);
+		if(code == 37 || code == 38 || code == 39 || code == 40 || code == 8 || code == 20 || code == 16){
+			return;
+		}else if(code == 13){
+			if($(this).nextAll().length == 0){
+				var newUserElem = $(this).clone(true);
+				newUserElem.val("");
+				$(this).after(newUserElem);
 			}
-			var nextElem = $(this).parent('div').clone(true);
-			nextElem.children()[0].value = "";
-			nextElem.appendTo('.collaborator-form-div');
+			return;
 		}
+		if($(this).val()){
+			var dataToSend = {"input_val":$(this).val()}
+			$.get("/get-users", dataToSend).done(function(data) {
+				console.log(data);
+				$("#user_entities_data").empty();
+				for(var i = 0; i < data.query_results.length; i++){
+					$("#user_entities_data").append("<option value=\""+data.query_results[i].profile_name+"\" name=\"" + data.query_results[i].user_key+"\">")
+				}
+			}).fail(function(jqxhr, textStatus, error) {
+				console.log("GET Request Failed: " + textStatus + ", " + error);
+			});
+		}
+	});
+	
+	$(".delete_project_user").click(function(){
+		var elemToDelete = $(this).parent();
+		var dataToSend = {"user_key": $(this).next().val(),
+							"project_key":$(this).prev().val()}
+		$.post("/delete-project-user", dataToSend).done(function(data){
+			elemToDelete.remove();
+		}).fail(function(jqxhr, textStatus, error){
+			console.log("POST Request Failed: " + textStatus + ", " + error);
+		});
 	});
 };
 
